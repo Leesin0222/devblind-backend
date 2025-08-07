@@ -1,0 +1,33 @@
+#일단 예시 박아놓고 나중에 dev서버 돌릴 때 다시 설정하기.
+spring:
+  datasource:
+    url: jdbc:postgresql://prod-host:5432/proddb
+    driver-class-name: org.postgresql.Driver
+    username: prod_user
+    password: prod_password
+    hikari:
+      maximum-pool-size: 30
+
+    data:
+      redis:
+        host: localhost
+        port: 6379
+        password: redis6379
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: false
+    open-in-view: false
+
+sms:
+  enabled: true
+  provider: ncp
+  ncp:
+    access-key: ${NCP_ACCESS_KEY}
+    secret-key: ${NCP_SECRET_KEY}
+    service-id: ${NCP_SERVICE_ID}
+    sender-phone: ${NCP_SENDER_PHONE}

@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: devblind
+  profiles:
+    active: local # active profile setting
+
+jwt:
+  secret: QjcpHq+LTAQg4jwiDYpDS0US83JW/Z/SFUTaN/aWWOw= #나중에 바꾸기
+  access-expiration: 900000     # 15? (ms)
+  refresh-expiration: 1209600000  # 14? (ms)
+
+toss:
+  secret-key: sk_test_xxx
