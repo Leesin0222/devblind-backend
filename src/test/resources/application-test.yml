@@ -1,0 +1,49 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: 
+    hikari:
+      maximum-pool-size: 5
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+    show-sql: true
+    open-in-view: false
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  test:
+    database:
+      replace: none
+
+logging:
+  level:
+    com.yongjincompany.devblind: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+
+sms:
+  enabled: false
+  provider: fake
+  ncp:
+    access-key: test
+    secret-key: test
+    service-id: test
+    sender-phone: test
+
+aws:
+  s3:
+    bucket: test-bucket
+    region: ap-northeast-2
+    access-key: test
+    secret-key: test

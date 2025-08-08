@@ -3,6 +3,21 @@ spring:
     name: devblind
   profiles:
     active: local # active profile setting
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+logging:
+  level:
+    root: INFO
+    com.yongjincompany.devblind: INFO
+    org.springframework.security: WARN
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 
 jwt:
   secret: QjcpHq+LTAQg4jwiDYpDS0US83JW/Z/SFUTaN/aWWOw= #나중에 바꾸기
@@ -10,4 +25,38 @@ jwt:
   refresh-expiration: 1209600000  # 14? (ms)
 
 toss:
-  secret-key: sk_test_xxx
+  payment:
+    secret-key: ${TOSS_PAYMENT_SECRET_KEY:test_sk_XXXX}
+  refund:
+    secret-key: ${TOSS_REFUND_SECRET_KEY:sk_test_xxx}
+
+# AWS S3 Configuration
+aws:
+  s3:
+    bucket: ${AWS_S3_BUCKET:devblind-profile-images}
+    region: ${AWS_REGION:ap-northeast-2}
+    access-key: ${AWS_ACCESS_KEY_ID:}
+    secret-key: ${AWS_SECRET_ACCESS_KEY:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+
+# Swagger/OpenAPI 설정
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    display-request-duration: true
+    filter: true
+  packages-to-scan: com.yongjincompany.devblind.controller
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
