@@ -1,4 +1,4 @@
-package com.yongjincompany.devblind.controller;
+package com.yongjincompany.devblind.user.controller;
 
 import com.yongjincompany.devblind.common.security.AuthUser;
 import com.yongjincompany.devblind.user.service.UserBalanceService;
