@@ -21,9 +21,9 @@ logging:
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 
 jwt:
-  secret: ${JWT_SECRET:QjcpHq+LTAQg4jwiDYpDS0US83JW/Z/SFUTaN/aWWOw=} # 환경변수로 설정 필요
-  access-expiration: 900000     # 15? (ms)
-  refresh-expiration: 1209600000  # 14? (ms)
+  secret: ${JWT_SECRET:QjcpHq+LTAQg4jwiDYpDS0US83JW/Z/SFUTaN/aWWOw=} # 운영환경에서는 반드시 환경변수로 설정
+  access-token-expiration: 900000     # 15분 (ms)
+  refresh-token-expiration: 1209600000  # 14일 (ms)
 
 toss:
   payment:
@@ -38,6 +38,12 @@ aws:
     region: ${AWS_REGION:ap-northeast-2}
     access-key: ${AWS_ACCESS_KEY_ID:}
     secret-key: ${AWS_SECRET_ACCESS_KEY:}
+
+# Firebase FCM 설정
+firebase:
+  enabled: ${FIREBASE_ENABLED:false}
+  service-account:
+    path: ${FIREBASE_SERVICE_ACCOUNT_PATH:classpath:firebase-service-account.json}
 
 management:
   endpoints:

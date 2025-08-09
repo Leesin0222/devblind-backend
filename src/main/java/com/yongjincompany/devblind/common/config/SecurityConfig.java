@@ -29,8 +29,9 @@ public class SecurityConfig {
                 .csrf(CsrfConfigurer::disable)
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/auth/**", "/swagger-ui/**", "/api-docs/**", "/actuator/health").permitAll()
+                        .requestMatchers("/api/files/**", "/payments/**", "/refunds/**", "/users/**", "/matching/**", "/chat/**").authenticated()
+                        .anyRequest().denyAll()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtProvider, userRepository), UsernamePasswordAuthenticationFilter.class)
                 .build();

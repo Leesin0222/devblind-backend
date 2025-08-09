@@ -22,10 +22,13 @@ spring:
       port: 6379
 
 sms:
-  enabled: false
+  enabled: false  # 로컬 환경에서는 SMS 발송 비활성화
   provider: fake
   ncp:
     access-key: dummy
     secret-key: dummy
     service-id: dummy
     sender-phone: dummy
+
+firebase:
+  enabled: false  # 로컬 환경에서는 Firebase 비활성화
