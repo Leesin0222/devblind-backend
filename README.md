@@ -9,7 +9,6 @@
 [![Redis](https://img.shields.io/badge/Redis-7.0-red.svg)](https://redis.io/)
 [![Swagger](https://img.shields.io/badge/API%20Docs-Swagger-85EA2D.svg)](http://localhost:8080/swagger-ui.html)
 
----
 
 ## 목차
 
@@ -23,7 +22,6 @@
 - [모니터링](#모니터링)
 - [배포](#배포)
 
----
 
 ## 프로젝트 개요
 
@@ -35,7 +33,6 @@
 - **프라이버시 보호**: 철저한 개인정보 보호 및 블라인드 시스템
 - **실시간 소통**: WebSocket 기반 실시간 채팅
 
----
 
 ## 주요 기능
 
@@ -67,7 +64,6 @@
 - **AWS S3**: 프로필 이미지 업로드
 - **파일 검증**: 형식 및 크기 검증
 
----
 
 ## 아키텍처
 
@@ -92,7 +88,6 @@ graph TB
 - **레이어드 아키텍처**: Controller → Service → Repository
 - **의존성 역전**: 인터페이스 기반 느슨한 결합
 
----
 
 ## API 문서
 
@@ -151,7 +146,6 @@ POST /refunds               # 환불 요청
 GET  /refund-histories      # 환불 내역 조회
 ```
 
----
 
 ## 기술 스택
 
@@ -183,8 +177,6 @@ GET  /refund-histories      # 환불 내역 조회
 - **Spring Boot Actuator**: 헬스체크 및 메트릭
 - **Logback**: 구조화된 로깅
 - **Micrometer**: 메트릭 수집
-
----
 
 ## 프로젝트 구조
 
@@ -237,7 +229,6 @@ src/main/java/com/yongjincompany/devblind/
 - **의존성 주입**: Spring IoC 컨테이너 활용
 - **Repository 패턴**: 데이터 접근 계층 추상화
 
----
 
 ## 보안
 
@@ -258,7 +249,6 @@ src/main/java/com/yongjincompany/devblind/
 - **실패 로그**: 인증 실패 시도 기록
 - **이상 탐지**: 비정상적인 접근 패턴 감지
 
----
 
 ## 모니터링
 
@@ -292,8 +282,6 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 - **데이터베이스 연결**: Connection Pool 상태
 - **Redis 연결**: 캐시 히트율
 - **외부 API**: SMS, 결제, S3 연동 상태
-
----
 
 ## 배포
 
@@ -345,7 +333,6 @@ export JAVA_OPTS="-Xmx2g -Xms1g"
 java $JAVA_OPTS -jar devblind-backend.jar
 ```
 
----
 
 ## 테스트
 
@@ -374,13 +361,11 @@ src/test/java/com/yongjincompany/devblind/
 - **서비스 계층**: 90% 이상
 - **컨트롤러 계층**: 85% 이상
 
----
 
 ## 개발자
 
 **Backend Developer**: 이용진
 
----
 
 ## 프로젝트 소개
 
