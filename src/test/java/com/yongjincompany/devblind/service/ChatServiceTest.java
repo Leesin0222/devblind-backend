@@ -1,11 +1,17 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.chat.service;
 
-import com.yongjincompany.devblind.dto.chat.ChatMessageRequest;
-import com.yongjincompany.devblind.dto.chat.ChatMessageResponse;
-import com.yongjincompany.devblind.dto.chat.ChatRoomResponse;
-import com.yongjincompany.devblind.entity.*;
-import com.yongjincompany.devblind.exception.ApiException;
-import com.yongjincompany.devblind.repository.*;
+import com.yongjincompany.devblind.chat.dto.ChatMessageRequest;
+import com.yongjincompany.devblind.chat.dto.ChatMessageResponse;
+import com.yongjincompany.devblind.chat.dto.ChatRoomResponse;
+import com.yongjincompany.devblind.chat.entity.ChatMessage;
+import com.yongjincompany.devblind.chat.entity.ChatRoom;
+import com.yongjincompany.devblind.matching.entity.Matching;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.common.exception.ApiException;
+import com.yongjincompany.devblind.chat.repository.ChatMessageRepository;
+import com.yongjincompany.devblind.chat.repository.ChatRoomRepository;
+import com.yongjincompany.devblind.matching.repository.MatchingRepository;
+import com.yongjincompany.devblind.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +32,13 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ChatServiceTest {
@@ -43,7 +55,7 @@ class ChatServiceTest {
     private SimpMessagingTemplate messagingTemplate;
 
     @InjectMocks
-    private ChatService chatService;
+    private com.yongjincompany.devblind.chat.service.ChatService chatService;
 
     private User user1;
     private User user2;
@@ -73,7 +85,7 @@ class ChatServiceTest {
                 .id(1L)
                 .user1(user1)
                 .user2(user2)
-                .isActive(true)
+                .status(Matching.Status.MATCHED)
                 .createdAt(LocalDateTime.now())
                 .build();
 
@@ -138,7 +150,7 @@ class ChatServiceTest {
     @DisplayName("메시지 전송 성공")
     void sendMessage_Success() {
         // given
-        ChatMessageRequest request = new ChatMessageRequest(1L, "안녕하세요!", ChatMessage.MessageType.TEXT);
+        ChatMessageRequest request = new ChatMessageRequest(1L, "안녕하세요!", "TEXT");
         
         when(userRepository.findByIdAndDeletedFalse(1L)).thenReturn(Optional.of(user1));
         when(matchingRepository.findById(1L)).thenReturn(Optional.of(matching));
@@ -159,7 +171,7 @@ class ChatServiceTest {
     @DisplayName("매칭에 속하지 않은 사용자가 메시지 전송 시 실패")
     void sendMessage_NotInMatching_ThrowsException() {
         // given
-        ChatMessageRequest request = new ChatMessageRequest(1L, "안녕하세요!", ChatMessage.MessageType.TEXT);
+        ChatMessageRequest request = new ChatMessageRequest(1L, "안녕하세요!", "TEXT");
         
         when(userRepository.findByIdAndDeletedFalse(999L)).thenReturn(Optional.of(user1));
         when(matchingRepository.findById(1L)).thenReturn(Optional.of(matching));
@@ -177,10 +189,10 @@ class ChatServiceTest {
                 .id(1L)
                 .user1(user1)
                 .user2(user2)
-                .isActive(false)
+                .status(Matching.Status.ENDED)
                 .build();
         
-        ChatMessageRequest request = new ChatMessageRequest(1L, "안녕하세요!", ChatMessage.MessageType.TEXT);
+        ChatMessageRequest request = new ChatMessageRequest(1L, "안녕하세요!", "TEXT");
         
         when(userRepository.findByIdAndDeletedFalse(1L)).thenReturn(Optional.of(user1));
         when(matchingRepository.findById(1L)).thenReturn(Optional.of(inactiveMatching));
@@ -194,7 +206,7 @@ class ChatServiceTest {
     @DisplayName("빈 메시지 전송 시 실패")
     void sendMessage_EmptyContent_ThrowsException() {
         // given
-        ChatMessageRequest request = new ChatMessageRequest(1L, "", ChatMessage.MessageType.TEXT);
+        ChatMessageRequest request = new ChatMessageRequest(1L, "", "TEXT");
         
         when(userRepository.findByIdAndDeletedFalse(1L)).thenReturn(Optional.of(user1));
         when(matchingRepository.findById(1L)).thenReturn(Optional.of(matching));

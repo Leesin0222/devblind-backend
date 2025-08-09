@@ -1,9 +1,9 @@
-package com.yongjincompany.devblind.common;
+package com.yongjincompany.devblind.common.security;
 
-import com.yongjincompany.devblind.entity.User;
-import com.yongjincompany.devblind.exception.ApiException;
-import com.yongjincompany.devblind.exception.ErrorCode;
-import com.yongjincompany.devblind.repository.UserRepository;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.common.exception.ApiException;
+import com.yongjincompany.devblind.common.exception.ErrorCode;
+import com.yongjincompany.devblind.user.repository.UserRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

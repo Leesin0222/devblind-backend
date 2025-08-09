@@ -1,17 +1,17 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.payment.service;
 
-import com.yongjincompany.devblind.common.TossRefundClient;
-import com.yongjincompany.devblind.dto.RefundHistoryResponse;
-import com.yongjincompany.devblind.dto.RefundRequest;
-import com.yongjincompany.devblind.dto.TossRefundWebhookRequest;
-import com.yongjincompany.devblind.entity.PaymentHistory;
-import com.yongjincompany.devblind.entity.PaymentProduct;
-import com.yongjincompany.devblind.entity.User;
-import com.yongjincompany.devblind.exception.ApiException;
-import com.yongjincompany.devblind.exception.ErrorCode;
-import com.yongjincompany.devblind.repository.PaymentHistoryRepository;
-import com.yongjincompany.devblind.repository.PaymentProductRepository;
-import com.yongjincompany.devblind.repository.UserRepository;
+import com.yongjincompany.devblind.common.util.TossRefundClient;
+import com.yongjincompany.devblind.payment.dto.RefundHistoryResponse;
+import com.yongjincompany.devblind.payment.dto.RefundRequest;
+import com.yongjincompany.devblind.payment.dto.TossRefundWebhookRequest;
+import com.yongjincompany.devblind.payment.entity.PaymentHistory;
+import com.yongjincompany.devblind.payment.entity.PaymentProduct;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.common.exception.ApiException;
+import com.yongjincompany.devblind.common.exception.ErrorCode;
+import com.yongjincompany.devblind.payment.repository.PaymentHistoryRepository;
+import com.yongjincompany.devblind.payment.repository.PaymentProductRepository;
+import com.yongjincompany.devblind.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class RefundService {
     private final PaymentProductRepository paymentProductRepository;
     private final PaymentHistoryRepository paymentHistoryRepository;
     private final TossRefundClient tossRefundClient; // 토스 환불 API 연동 클라이언트
-    private final UserBalanceService userBalanceService;
+    private final com.yongjincompany.devblind.user.service.UserBalanceService userBalanceService;
 
     @Transactional
     public void requestRefund(RefundRequest request, Long userId) {
@@ -66,7 +66,7 @@ public class RefundService {
     }
 
     @Transactional
-    public void handleRefundResult(TossRefundWebhookRequest request) {
+    public void handleTossRefundWebhook(TossRefundWebhookRequest request) {
         log.info("환불 결과 처리: orderId={}, status={}", request.orderId(), request.status());
         
         PaymentHistory paymentHistory = paymentHistoryRepository.findByOrderId(request.orderId())
@@ -94,7 +94,7 @@ public class RefundService {
         }
     }
     
-    public List<RefundHistoryResponse> getUserRefundHistories(Long userId) {
+    public List<RefundHistoryResponse> getRefundHistories(Long userId) {
         log.debug("환불 내역 조회: userId={}", userId);
         
         List<PaymentHistory> histories = paymentHistoryRepository.findAllByUserIdAndRefundStatusNot(userId, PaymentHistory.RefundStatus.NONE);

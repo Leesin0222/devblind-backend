@@ -1,13 +1,13 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.auth.service;
 
-import com.yongjincompany.devblind.common.JwtProvider;
-import com.yongjincompany.devblind.dto.auth.TokenRefreshRequest;
-import com.yongjincompany.devblind.dto.auth.TokenRefreshResponse;
-import com.yongjincompany.devblind.dto.auth.VerifyCodeResponse;
-import com.yongjincompany.devblind.entity.User;
-import com.yongjincompany.devblind.exception.ApiException;
-import com.yongjincompany.devblind.exception.ErrorCode;
-import com.yongjincompany.devblind.repository.UserRepository;
+import com.yongjincompany.devblind.common.security.JwtProvider;
+import com.yongjincompany.devblind.auth.dto.TokenRefreshRequest;
+import com.yongjincompany.devblind.auth.dto.TokenRefreshResponse;
+import com.yongjincompany.devblind.auth.dto.VerifyCodeResponse;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.common.exception.ApiException;
+import com.yongjincompany.devblind.common.exception.ErrorCode;
+import com.yongjincompany.devblind.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,9 +18,21 @@ import org.springframework.data.redis.core.RedisTemplate;
 import java.time.Duration;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.startsWith;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AuthServiceTest {
@@ -35,10 +47,10 @@ class AuthServiceTest {
     private JwtProvider jwtProvider;
 
     @Mock
-    private RefreshTokenService refreshTokenService;
+    private com.yongjincompany.devblind.auth.service.RefreshTokenService refreshTokenService;
 
     @InjectMocks
-    private AuthService authService;
+    private com.yongjincompany.devblind.auth.service.AuthService authService;
 
     @Test
     void refreshAccessToken_whenRefreshTokenInvalid_thenThrow() {
@@ -86,8 +98,8 @@ class AuthServiceTest {
 
         TokenRefreshResponse response = authService.refreshAccessToken(request);
 
-        assertEquals("new-access-token", response.getAccessToken());
-        assertEquals("new-refresh-token", response.getRefreshToken());
+        assertEquals("new-access-token", response.accessToken());
+        assertEquals("new-refresh-token", response.refreshToken());
         verify(refreshTokenService, times(1)).saveRefreshToken(1L, "new-refresh-token");
     }
 

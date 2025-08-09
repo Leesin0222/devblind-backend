@@ -1,6 +1,6 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.auth.service;
 
-import com.yongjincompany.devblind.common.JwtProperties;
+import com.yongjincompany.devblind.common.security.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -18,7 +18,7 @@ public class RefreshTokenService {
 
     public void saveRefreshToken(Long userId, String refreshToken) {
         String key = REFRESH_PREFIX + userId;
-        long expirationMillis = jwtProperties.getRefreshExpiration();
+        long expirationMillis = jwtProperties.getRefreshTokenExpiration();
         redisTemplate.opsForValue().set(key, refreshToken, Duration.ofMillis(expirationMillis));
     }
 

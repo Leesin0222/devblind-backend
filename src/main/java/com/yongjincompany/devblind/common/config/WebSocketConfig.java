@@ -36,7 +36,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .withSockJS();
     }
 
-    @Override
     public ChannelInterceptor configureClientInboundChannel() {
         return new ChannelInterceptor() {
             @Override
@@ -55,7 +54,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                                         .password("")
                                         .authorities("USER")
                                         .build();
-                                accessor.setUser(userDetails);
+                                accessor.setUser(() -> userDetails.getUsername());
                             }
                         } catch (Exception e) {
                             // 토큰 검증 실패 시 연결 거부

@@ -1,7 +1,7 @@
 package com.yongjincompany.devblind.controller;
 
-import com.yongjincompany.devblind.common.AuthUser;
-import com.yongjincompany.devblind.service.UserBalanceService;
+import com.yongjincompany.devblind.common.security.AuthUser;
+import com.yongjincompany.devblind.user.service.UserBalanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

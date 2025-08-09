@@ -1,7 +1,8 @@
-package com.yongjincompany.devblind.entity;
+package com.yongjincompany.devblind.matching.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.yongjincompany.devblind.user.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -39,11 +40,11 @@ public class MatchingProfile {
     @Column(nullable = false, length = 100)
     private String location; // 지역
 
+    @Builder.Default
     @Column(nullable = false)
     private Boolean isActive = true; // 매칭 활성화 여부
 
-    @Column(nullable = false)
-    @Index(name = "idx_matching_profile_last_active")
+        @Column(nullable = false)
     private LocalDateTime lastActiveAt; // 마지막 활동 시간
 
     @Column(nullable = false)

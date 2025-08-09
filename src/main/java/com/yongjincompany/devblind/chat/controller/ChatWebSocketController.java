@@ -1,8 +1,8 @@
 package com.yongjincompany.devblind.controller;
 
-import com.yongjincompany.devblind.dto.chat.ChatMessageWebSocketRequest;
-import com.yongjincompany.devblind.dto.chat.ChatMessageResponse;
-import com.yongjincompany.devblind.service.ChatService;
+import com.yongjincompany.devblind.chat.dto.ChatMessageWebSocketRequest;
+import com.yongjincompany.devblind.chat.dto.ChatMessageResponse;
+import com.yongjincompany.devblind.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -11,6 +11,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import java.security.Principal;
 
 @Slf4j
 @Controller
@@ -37,11 +38,11 @@ public class ChatWebSocketController {
                 userId, matchingId, messageRequest.content());
 
         // ChatMessageRequest로 변환하여 서비스 호출
-        com.yongjincompany.devblind.dto.chat.ChatMessageRequest request = 
-                new com.yongjincompany.devblind.dto.chat.ChatMessageRequest(
+        com.yongjincompany.devblind.chat.dto.ChatMessageRequest request = 
+                new com.yongjincompany.devblind.chat.dto.ChatMessageRequest(
                         matchingId, 
                         messageRequest.content(), 
-                        messageRequest.messageType()
+                        messageRequest.messageType().name()
                 );
 
         // 메시지 저장 및 브로드캐스트
@@ -72,9 +73,9 @@ public class ChatWebSocketController {
      * 헤더에서 사용자 ID 추출
      */
     private Long extractUserIdFromHeader(SimpMessageHeaderAccessor headerAccessor) {
-        Authentication authentication = headerAccessor.getUser();
-        if (authentication != null && authentication.getName() != null) {
-            return Long.valueOf(authentication.getName());
+        Principal principal = headerAccessor.getUser();
+        if (principal != null && principal.getName() != null) {
+            return Long.valueOf(principal.getName());
         }
         
         // 세션에서 사용자 ID 가져오기 (fallback)

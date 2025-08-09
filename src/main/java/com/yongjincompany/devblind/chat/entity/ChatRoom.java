@@ -1,7 +1,21 @@
-package com.yongjincompany.devblind.entity;
+package com.yongjincompany.devblind.chat.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -22,11 +36,11 @@ public class ChatRoom {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user1_id", nullable = false)
-    private User user1; // 채팅방 사용자 1
+    private com.yongjincompany.devblind.user.entity.User user1; // 채팅방 사용자 1
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user2_id", nullable = false)
-    private User user2; // 채팅방 사용자 2
+    private com.yongjincompany.devblind.user.entity.User user2; // 채팅방 사용자 2
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -40,9 +54,11 @@ public class ChatRoom {
     @Column(length = 500)
     private String lastMessage; // 마지막 메시지 내용
 
+    @Builder.Default
     @Column(nullable = false)
     private Integer unreadCountUser1 = 0; // user1의 읽지 않은 메시지 수
 
+    @Builder.Default
     @Column(nullable = false)
     private Integer unreadCountUser2 = 0; // user2의 읽지 않은 메시지 수
 

@@ -7,7 +7,12 @@ import com.yongjincompany.devblind.file.service.S3StorageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -49,10 +54,11 @@ public class FileUploadController {
         try {
             String imageUrl = s3StorageService.uploadProfileImage(image, userId);
             
-            ProfileImageUploadResponse response = ProfileImageUploadResponse.builder()
-                    .imageUrl(imageUrl)
-                    .message("프로필 이미지가 성공적으로 업로드되었습니다.")
-                    .build();
+            ProfileImageUploadResponse response = new ProfileImageUploadResponse(
+                    imageUrl,
+                    image.getOriginalFilename(),
+                    image.getSize()
+            );
 
             log.info("프로필 이미지 업로드 완료: userId={}, imageUrl={}", userId, imageUrl);
             return ResponseEntity.ok(response);

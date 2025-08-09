@@ -1,4 +1,4 @@
-package com.yongjincompany.devblind.entity;
+package com.yongjincompany.devblind.payment.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,62 +12,77 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class PaymentHistory {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String orderId;         // 토스 결제 주문번호
-    private Long userId;
-    private Long productId;
-    private Long amount;            // 결제 금액
-    private Long coin;              // 지급 코인 수
-
-    @Enumerated(EnumType.STRING)
-    private Status status;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
+    
     @Column(nullable = false)
+    private Long userId;
+    
+    @Column(nullable = false)
+    private Long productId;
+    
+    @Column(nullable = false)
+    private String paymentId;
+    
+    @Column(nullable = false)
+    private String orderId;
+    
+    @Column(nullable = false)
+    private Long amount;
+    
+    @Column(nullable = false)
+    private Integer coin;
+    
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PaymentStatus status;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
     private RefundStatus refundStatus = RefundStatus.NONE;
-
-    private LocalDateTime refundRequestedAt;
-    private LocalDateTime refundCompletedAt;
-
-    public enum Status {
-        PENDING, SUCCESS, FAILED
+    
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+    
+    private LocalDateTime paidAt;
+    private LocalDateTime refundedAt;
+    private String refundReason;
+    
+    public enum PaymentStatus {
+        PENDING, COMPLETED, FAILED, CANCELLED
     }
-
-    public void markSuccess() {
-        this.status = Status.SUCCESS;
-    }
-
-    public void markFailed() {
-        this.status = Status.FAILED;
-    }
-
+    
     public enum RefundStatus {
         NONE, REQUESTED, COMPLETED, FAILED
     }
-
-    public void requestRefund() {
-        this.refundStatus = RefundStatus.REQUESTED;
-        this.refundRequestedAt = LocalDateTime.now();
-    }
-
-    public void completeRefund() {
-        this.refundStatus = RefundStatus.COMPLETED;
-        this.refundCompletedAt = LocalDateTime.now();
-    }
-
-    public void failRefund() {
-        this.refundStatus = RefundStatus.FAILED;
-    }
-
+    
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
+    }
+    
+    public void markSuccess() {
+        this.status = PaymentStatus.COMPLETED;
+        this.paidAt = LocalDateTime.now();
+    }
+    
+    public void markFailed() {
+        this.status = PaymentStatus.FAILED;
+    }
+    
+    public void requestRefund() {
+        this.refundStatus = RefundStatus.REQUESTED;
+    }
+    
+    public void completeRefund() {
+        this.refundStatus = RefundStatus.COMPLETED;
+        this.refundedAt = LocalDateTime.now();
+    }
+    
+    public void failRefund() {
+        this.refundStatus = RefundStatus.FAILED;
     }
 }

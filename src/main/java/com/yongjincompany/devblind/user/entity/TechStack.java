@@ -1,4 +1,4 @@
-package com.yongjincompany.devblind.entity;
+package com.yongjincompany.devblind.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -17,4 +17,8 @@ public class TechStack {
 
     @Column(nullable = false, unique = true, length = 30)
     private String name;
+    
+    @Builder.Default
+    @Column(nullable = false)
+    private boolean active = true;
 }

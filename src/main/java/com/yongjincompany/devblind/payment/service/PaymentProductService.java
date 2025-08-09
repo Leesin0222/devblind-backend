@@ -1,7 +1,7 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.payment.service;
 
-import com.yongjincompany.devblind.dto.PaymentProductResponse;
-import com.yongjincompany.devblind.repository.PaymentProductRepository;
+import com.yongjincompany.devblind.payment.dto.PaymentProductResponse;
+import com.yongjincompany.devblind.payment.repository.PaymentProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +13,7 @@ public class PaymentProductService {
 
     private final PaymentProductRepository productRepository;
 
-    public List<PaymentProductResponse> getActiveProducts() {
+    public List<PaymentProductResponse> getPaymentProducts() {
         return productRepository.findAllByActiveTrue().stream()
                 .map(PaymentProductResponse::from)
                 .toList();

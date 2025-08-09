@@ -1,7 +1,8 @@
-package com.yongjincompany.devblind.entity;
+package com.yongjincompany.devblind.matching.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.yongjincompany.devblind.user.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -25,6 +26,7 @@ public class Matching {
     @JoinColumn(name = "user2_id", nullable = false)
     private User user2; // 매칭된 사용자 2
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Status status = Status.MATCHED; // 매칭 상태

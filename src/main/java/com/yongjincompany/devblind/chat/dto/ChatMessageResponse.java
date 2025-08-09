@@ -1,25 +1,30 @@
-package com.yongjincompany.devblind.dto.chat;
+package com.yongjincompany.devblind.chat.dto;
 
-import com.yongjincompany.devblind.entity.ChatMessage;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 public record ChatMessageResponse(
-        Long id,
-        Long matchingId,
-        Long senderId,
-        String content,
-        ChatMessage.MessageType messageType,
-        LocalDateTime createdAt
+    Long id,
+    Long senderId,
+    String senderNickname,
+    String content,
+    String messageType,
+    LocalDateTime createdAt,
+    boolean isRead
 ) {
-    public static ChatMessageResponse from(ChatMessage message) {
+    public static ChatMessageResponse from(com.yongjincompany.devblind.chat.entity.ChatMessage message) {
         return new ChatMessageResponse(
-                message.getId(),
-                message.getMatchingId(),
-                message.getSenderId(),
-                message.getContent(),
-                message.getMessageType(),
-                message.getCreatedAt()
+            message.getId(),
+            message.getSenderId(),
+            null, // senderNickname은 별도 조회 필요
+            message.getContent(),
+            message.getMessageType().name(),
+            message.getCreatedAt(),
+            false // isRead는 별도 조회 필요
         );
     }
 }

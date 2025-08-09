@@ -14,7 +14,8 @@ public class FirebaseConfig {
 
     @Bean
     public FirebaseApp firebaseApp() throws IOException {
-        //TODO: firebase project만들고 해당 파일 프로젝트에 추가해야함.
+        // TODO: Firebase 프로젝트 생성 후 service-account.json 파일을 src/main/resources/에 추가해야 함
+        // 또는 환경변수 FIREBASE_SERVICE_ACCOUNT_PATH로 파일 경로 설정 가능
         FileInputStream serviceAccount = new FileInputStream("src/main/resources/firebase-service-account.json");
 
         FirebaseOptions options = FirebaseOptions.builder()

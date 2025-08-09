@@ -1,36 +1,34 @@
-package com.yongjincompany.devblind.dto.chat;
+package com.yongjincompany.devblind.chat.dto;
 
-import com.yongjincompany.devblind.entity.ChatRoom;
-import com.yongjincompany.devblind.entity.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 public record ChatRoomResponse(
-        Long id,
-        Long matchingId,
-        Long otherUserId,
-        String otherUserNickname,
-        String otherUserProfileImageUrl,
-        String lastMessage,
-        LocalDateTime lastMessageAt,
-        Integer unreadCount,
-        LocalDateTime createdAt
+    Long matchingId,
+    Long otherUserId,
+    String otherUserNickname,
+    String lastMessage,
+    LocalDateTime lastMessageAt,
+    int unreadCount,
+    String status
 ) {
-    public static ChatRoomResponse from(ChatRoom chatRoom, Long currentUserId) {
-        User otherUser = chatRoom.getUser1().getId().equals(currentUserId) 
+    public static ChatRoomResponse from(com.yongjincompany.devblind.chat.entity.ChatRoom chatRoom, Long currentUserId) {
+        com.yongjincompany.devblind.user.entity.User otherUser = chatRoom.getUser1().getId().equals(currentUserId) 
                 ? chatRoom.getUser2() 
                 : chatRoom.getUser1();
         
         return new ChatRoomResponse(
-                chatRoom.getId(),
-                chatRoom.getMatchingId(),
-                otherUser.getId(),
-                otherUser.getNickname(),
-                otherUser.getProfileImageUrl(),
-                chatRoom.getLastMessage(),
-                chatRoom.getLastMessageAt(),
-                chatRoom.getUnreadCount(currentUserId),
-                chatRoom.getCreatedAt()
+            chatRoom.getMatchingId(),
+            otherUser.getId(),
+            otherUser.getNickname(),
+            chatRoom.getLastMessage(),
+            chatRoom.getLastMessageAt(),
+            chatRoom.getUnreadCountUser1() + chatRoom.getUnreadCountUser2(),
+            "CHATTING"
         );
     }
 }

@@ -1,12 +1,27 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.matching.service;
 
-import com.yongjincompany.devblind.dto.matching.LikeRequest;
-import com.yongjincompany.devblind.dto.matching.LikeResponse;
-import com.yongjincompany.devblind.dto.matching.MatchingProfileRequest;
-import com.yongjincompany.devblind.dto.matching.MatchingProfileResponse;
-import com.yongjincompany.devblind.entity.*;
-import com.yongjincompany.devblind.exception.ApiException;
-import com.yongjincompany.devblind.repository.*;
+import com.yongjincompany.devblind.matching.dto.LikeRequest;
+import com.yongjincompany.devblind.matching.dto.LikeResponse;
+import com.yongjincompany.devblind.matching.dto.MatchingProfileRequest;
+import com.yongjincompany.devblind.matching.dto.MatchingProfileResponse;
+import com.yongjincompany.devblind.matching.entity.DailyRecommendation;
+import com.yongjincompany.devblind.matching.entity.Matching;
+import com.yongjincompany.devblind.matching.entity.MatchingProfile;
+import com.yongjincompany.devblind.matching.entity.UserLike;
+import com.yongjincompany.devblind.user.entity.TechStack;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.user.entity.UserTechStack;
+import com.yongjincompany.devblind.common.exception.ApiException;
+import com.yongjincompany.devblind.matching.repository.DailyRecommendationRepository;
+import com.yongjincompany.devblind.matching.repository.MatchingProfileRepository;
+import com.yongjincompany.devblind.matching.repository.MatchingRepository;
+import com.yongjincompany.devblind.matching.repository.UserLikeRepository;
+import com.yongjincompany.devblind.user.repository.UserRepository;
+import com.yongjincompany.devblind.user.repository.UserTechStackRepository;
+import com.yongjincompany.devblind.user.service.UserBalanceService;
+import com.yongjincompany.devblind.auth.service.FcmService;
+import com.yongjincompany.devblind.user.repository.DeviceTokenRepository;
+import com.yongjincompany.devblind.matching.repository.AdditionalRecommendationUsageRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,7 +41,13 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class MatchingServiceTest {
@@ -55,7 +76,7 @@ class MatchingServiceTest {
     private AdditionalRecommendationUsageRepository additionalRecommendationUsageRepository;
 
     @InjectMocks
-    private MatchingService matchingService;
+    private com.yongjincompany.devblind.matching.service.MatchingService matchingService;
 
     private User testUser;
     private User targetUser;
@@ -158,7 +179,7 @@ class MatchingServiceTest {
         LikeResponse result = matchingService.processLike(1L, request);
 
         // then
-        assertThat(result.isMatched()).isFalse();
+        assertThat(result.isMatch()).isFalse();
         assertThat(result.message()).isEqualTo("좋아요가 처리되었습니다.");
         verify(userLikeRepository).save(any(UserLike.class));
     }
@@ -180,7 +201,7 @@ class MatchingServiceTest {
         LikeResponse result = matchingService.processLike(1L, request);
 
         // then
-        assertThat(result.isMatched()).isFalse();
+        assertThat(result.isMatch()).isFalse();
         verify(userBalanceService).spend(1L, 50L); // Pull Request 비용 차감
         verify(fcmService).sendPushMessage(anyString(), anyString(), anyString());
     }
@@ -190,7 +211,20 @@ class MatchingServiceTest {
     void createMatchingProfile_Success() {
         // given
         MatchingProfileRequest request = new MatchingProfileRequest(
-                "안녕하세요", "착한 사람", "코딩", "개발자", 25, "서울"
+                "nickname",        // nickname
+                "bio",            // bio
+                "MALE",           // gender
+                25,               // age
+                "서울",            // location
+                List.of("Java"),  // techStacks
+                "FEMALE",         // preferredGender
+                22,               // minAge
+                30,               // maxAge
+                "서울",            // preferredLocation
+                "안녕하세요",       // introduction
+                "착한 사람",       // idealType
+                "코딩",           // hobby
+                "개발자"          // job
         );
         when(userRepository.findByIdAndDeletedFalse(1L)).thenReturn(Optional.of(testUser));
         when(matchingProfileRepository.findByUser(testUser)).thenReturn(Optional.empty());

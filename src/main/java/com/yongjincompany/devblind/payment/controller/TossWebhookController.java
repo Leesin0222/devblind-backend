@@ -1,7 +1,7 @@
 package com.yongjincompany.devblind.controller;
 
-import com.yongjincompany.devblind.dto.TossWebhookRequest;
-import com.yongjincompany.devblind.service.PaymentService;
+import com.yongjincompany.devblind.payment.dto.TossWebhookRequest;
+import com.yongjincompany.devblind.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

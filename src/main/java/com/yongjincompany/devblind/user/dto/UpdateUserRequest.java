@@ -1,25 +1,30 @@
-package com.yongjincompany.devblind.dto.user;
+package com.yongjincompany.devblind.user.dto;
 
-import com.yongjincompany.devblind.entity.User;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public record UpdateUserRequest(
-        @NotBlank
-        String nickname,
-        @NotNull
-        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-        LocalDate birth,
-        @NotNull
-        User.Gender gender,
-        @NotBlank
-        String profileImageUrl,
-        @NotEmpty
-        List<Long> techStackIds
-) {
-}
+    @NotBlank(message = "닉네임은 필수입니다")
+    String nickname,
+    
+    String bio,
+    
+    @NotBlank(message = "성별은 필수입니다")
+    String gender,
+    
+    @NotNull(message = "나이는 필수입니다")
+    Integer age,
+    
+    @NotBlank(message = "지역은 필수입니다")
+    String location,
+    
+    String profileImageUrl,
+    List<String> techStacks,
+    String birth,
+    List<Long> techStackIds
+) {}

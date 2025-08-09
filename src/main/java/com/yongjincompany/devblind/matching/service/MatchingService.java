@@ -1,10 +1,31 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.matching.service;
 
-import com.yongjincompany.devblind.dto.matching.*;
-import com.yongjincompany.devblind.entity.*;
-import com.yongjincompany.devblind.exception.ApiException;
-import com.yongjincompany.devblind.exception.ErrorCode;
-import com.yongjincompany.devblind.repository.*;
+import com.yongjincompany.devblind.matching.dto.LikeRequest;
+import com.yongjincompany.devblind.matching.dto.LikeResponse;
+import com.yongjincompany.devblind.matching.dto.MatchingProfileRequest;
+import com.yongjincompany.devblind.matching.dto.MatchingProfileResponse;
+import com.yongjincompany.devblind.matching.dto.MatchingResponse;
+import com.yongjincompany.devblind.matching.dto.MatchingScoreResponse;
+import com.yongjincompany.devblind.matching.dto.ReceivedLikeResponse;
+import com.yongjincompany.devblind.matching.entity.AdditionalRecommendationUsage;
+import com.yongjincompany.devblind.matching.entity.DailyRecommendation;
+import com.yongjincompany.devblind.matching.entity.Matching;
+import com.yongjincompany.devblind.matching.entity.MatchingProfile;
+import com.yongjincompany.devblind.matching.entity.UserLike;
+import com.yongjincompany.devblind.user.entity.DeviceToken;
+import com.yongjincompany.devblind.user.entity.TechStack;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.user.entity.UserTechStack;
+import com.yongjincompany.devblind.common.exception.ApiException;
+import com.yongjincompany.devblind.common.exception.ErrorCode;
+import com.yongjincompany.devblind.matching.repository.AdditionalRecommendationUsageRepository;
+import com.yongjincompany.devblind.matching.repository.DailyRecommendationRepository;
+import com.yongjincompany.devblind.matching.repository.MatchingProfileRepository;
+import com.yongjincompany.devblind.matching.repository.MatchingRepository;
+import com.yongjincompany.devblind.matching.repository.UserLikeRepository;
+import com.yongjincompany.devblind.user.repository.DeviceTokenRepository;
+import com.yongjincompany.devblind.user.repository.UserRepository;
+import com.yongjincompany.devblind.user.repository.UserTechStackRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -14,7 +35,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -28,9 +52,9 @@ public class MatchingService {
     private final DailyRecommendationRepository dailyRecommendationRepository;
     private final UserRepository userRepository;
     private final UserTechStackRepository userTechStackRepository;
-    private final UserBalanceService userBalanceService;
-    private final FcmService fcmService;
-    private final MatchingScoreService matchingScoreService;
+    private final com.yongjincompany.devblind.user.service.UserBalanceService userBalanceService;
+    private final com.yongjincompany.devblind.auth.service.FcmService fcmService;
+    private final com.yongjincompany.devblind.matching.service.MatchingScoreService matchingScoreService;
     private final DeviceTokenRepository deviceTokenRepository;
     private final AdditionalRecommendationUsageRepository additionalRecommendationUsageRepository;
 
@@ -93,13 +117,13 @@ public class MatchingService {
                     MatchingScoreService.ScoreBreakdown scoreBreakdown = matchingScoreService.calculateScoreBreakdown(user, userProfile, userTechStacks, profile);
                     return new ScoredProfile(profile, scoreBreakdown);
                 })
-                .sorted(Comparator.comparing(sp -> sp.scoreBreakdown.totalScore).reversed())
+                .sorted(Comparator.comparing((ScoredProfile sp) -> sp.scoreBreakdown().totalScore).reversed())
                 .limit(DAILY_RECOMMENDATION_LIMIT - todayRecommendationCount)
                 .toList();
 
         log.info("사용자 {}의 추천 프로필 점수: {}", userId, 
                 scoredProfiles.stream()
-                        .map(sp -> String.format("%s(%.2f)", sp.profile.getUser().getNickname(), sp.scoreBreakdown.totalScore))
+                        .map(sp -> String.format("%s(%.2f)", sp.profile().getUser().getNickname(), sp.scoreBreakdown().totalScore))
                         .collect(Collectors.joining(", ")));
 
         // 응답 생성
@@ -108,13 +132,13 @@ public class MatchingService {
                     List<TechStack> techStacks = userTechStackRepository.findByUser(scoredProfile.profile.getUser())
                             .stream().map(UserTechStack::getTechStack).toList();
                     return MatchingProfileResponse.fromWithScores(
-                            scoredProfile.profile, 
+                            scoredProfile.profile(), 
                             techStacks,
-                            scoredProfile.scoreBreakdown.totalScore,
-                            scoredProfile.scoreBreakdown.techScore,
-                            scoredProfile.scoreBreakdown.locationScore,
-                            scoredProfile.scoreBreakdown.ageScore,
-                            scoredProfile.scoreBreakdown.preferenceScore
+                            scoredProfile.scoreBreakdown().totalScore,
+                            scoredProfile.scoreBreakdown().techScore,
+                            scoredProfile.scoreBreakdown().locationScore,
+                            scoredProfile.scoreBreakdown().ageScore,
+                            scoredProfile.scoreBreakdown().preferenceScore
                     );
                 })
                 .toList();
@@ -162,10 +186,10 @@ public class MatchingService {
         // Pull Request인 경우 코인 차감 및 특별 알림
         if (request.likeType() == LikeRequest.LikeType.PULL_REQUEST) {
             userBalanceService.spend(userId, PULL_REQUEST_COST);
-            log.info("Pull Request 사용: userId={}, targetUserId={}, cost={}", userId, targetUserId, PULL_REQUEST_COST);
+            log.info("Pull Request 사용: userId={}, targetUserId={}, cost={}", userId, request.targetUserId(), PULL_REQUEST_COST);
             
             // Pull Request 특별 알림 발송
-            sendPullRequestNotification(targetUserId, user.getNickname());
+            sendPullRequestNotification(request.targetUserId(), user.getNickname());
         }
 
         // 좋아요/싫어요/PR 저장
@@ -191,10 +215,7 @@ public class MatchingService {
             return checkAndCreateMatching(user, targetUser);
         }
 
-        return LikeResponse.builder()
-                .isMatched(false)
-                .message("싫어요가 처리되었습니다.")
-                .build();
+        return new LikeResponse(false, "싫어요가 처리되었습니다.", null);
     }
 
     /**
@@ -372,16 +393,16 @@ public class MatchingService {
         
         String explanation = generateScoreExplanation(userProfile, targetProfile, scoreBreakdown);
         
-        return MatchingScoreResponse.builder()
-                .targetUserId(targetUserId)
-                .targetUserNickname(targetUser.getNickname())
-                .totalScore(scoreBreakdown.totalScore)
-                .techStackScore(scoreBreakdown.techScore)
-                .locationScore(scoreBreakdown.locationScore)
-                .ageScore(scoreBreakdown.ageScore)
-                .preferenceScore(scoreBreakdown.preferenceScore)
-                .explanation(explanation)
-                .build();
+        return new MatchingScoreResponse(
+                targetUserId,
+                targetUser.getNickname(),
+                scoreBreakdown.totalScore,
+                scoreBreakdown.techScore,
+                scoreBreakdown.locationScore,
+                scoreBreakdown.ageScore,
+                scoreBreakdown.preferenceScore,
+                explanation
+        );
     }
 
     /**
@@ -520,13 +541,13 @@ public class MatchingService {
                     MatchingScoreService.ScoreBreakdown scoreBreakdown = matchingScoreService.calculateScoreBreakdown(user, userProfile, userTechStacks, profile);
                     return new ScoredProfile(profile, scoreBreakdown);
                 })
-                .sorted(Comparator.comparing(sp -> sp.scoreBreakdown.totalScore).reversed())
+                .sorted(Comparator.comparing((ScoredProfile sp) -> sp.scoreBreakdown().totalScore).reversed())
                 .limit(count)
                 .toList();
 
         log.info("사용자 {}의 추천 프로필 점수: {}", user.getId(), 
                 scoredProfiles.stream()
-                        .map(sp -> String.format("%s(%.2f)", sp.profile.getUser().getNickname(), sp.scoreBreakdown.totalScore))
+                        .map(sp -> String.format("%s(%.2f)", sp.profile().getUser().getNickname(), sp.scoreBreakdown().totalScore))
                         .collect(Collectors.joining(", ")));
 
         // 응답 생성
@@ -535,13 +556,13 @@ public class MatchingService {
                     List<TechStack> techStacks = userTechStackRepository.findByUser(scoredProfile.profile.getUser())
                             .stream().map(UserTechStack::getTechStack).toList();
                     return MatchingProfileResponse.fromWithScores(
-                            scoredProfile.profile, 
+                            scoredProfile.profile(), 
                             techStacks,
-                            scoredProfile.scoreBreakdown.totalScore,
-                            scoredProfile.scoreBreakdown.techScore,
-                            scoredProfile.scoreBreakdown.locationScore,
-                            scoredProfile.scoreBreakdown.ageScore,
-                            scoredProfile.scoreBreakdown.preferenceScore
+                            scoredProfile.scoreBreakdown().totalScore,
+                            scoredProfile.scoreBreakdown().techScore,
+                            scoredProfile.scoreBreakdown().locationScore,
+                            scoredProfile.scoreBreakdown().ageScore,
+                            scoredProfile.scoreBreakdown().preferenceScore
                     );
                 })
                 .toList();
@@ -587,16 +608,10 @@ public class MatchingService {
 
             log.info("매칭이 성공했습니다! user1: {}, user2: {}", user1.getId(), user2.getId());
 
-            return LikeResponse.builder()
-                    .isMatched(true)
-                    .message("매칭이 성공했습니다!")
-                    .build();
+            return new LikeResponse(true, "매칭이 성공했습니다!", matching.getId());
         }
 
-        return LikeResponse.builder()
-                .isMatched(false)
-                .message("좋아요가 처리되었습니다.")
-                .build();
+        return new LikeResponse(false, "좋아요가 처리되었습니다.", null);
     }
 
     /**
@@ -657,7 +672,8 @@ public class MatchingService {
      */
     private String getDeviceToken(Long userId) {
         return deviceTokenRepository.findByUserId(userId)
-                .map(deviceToken -> deviceToken.getToken())
+                .stream().map(deviceToken -> deviceToken.getToken())
+                .findFirst()
                 .orElse("");
     }
 
@@ -675,14 +691,9 @@ public class MatchingService {
         };
     }
 
-    // 점수가 매겨진 프로필을 위한 내부 클래스
-    private static class ScoredProfile {
-        final MatchingProfile profile;
-        final MatchingScoreService.ScoreBreakdown scoreBreakdown;
-
-        ScoredProfile(MatchingProfile profile, MatchingScoreService.ScoreBreakdown scoreBreakdown) {
-            this.profile = profile;
-            this.scoreBreakdown = scoreBreakdown;
-        }
-    }
+    // 점수가 매겨진 프로필을 위한 내부 record
+    private record ScoredProfile(
+        MatchingProfile profile, 
+        MatchingScoreService.ScoreBreakdown scoreBreakdown
+    ) {}
 }

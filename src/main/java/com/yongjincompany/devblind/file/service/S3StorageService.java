@@ -1,7 +1,7 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.file.service;
 
-import com.yongjincompany.devblind.exception.ApiException;
-import com.yongjincompany.devblind.exception.ErrorCode;
+import com.yongjincompany.devblind.common.exception.ApiException;
+import com.yongjincompany.devblind.common.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

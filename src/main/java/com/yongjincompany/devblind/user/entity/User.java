@@ -1,7 +1,21 @@
 package com.yongjincompany.devblind.user.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -39,8 +53,18 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Builder.Default
     @Column(nullable = false)
     private boolean deleted = false;
+
+    @Column
+    private String bio;
+
+    @Column(nullable = false)
+    private Integer age;
+
+    @Column(nullable = false)
+    private String location;
 
     public enum Gender {
         MALE, FEMALE
@@ -57,13 +81,14 @@ public class User {
         this.deleted = true;
     }
 
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserTechStack> userTechStacks = new ArrayList<>();
+    private List<com.yongjincompany.devblind.user.entity.UserTechStack> userTechStacks = new ArrayList<>();
 
-    public void setTechStacks(List<TechStack> stacks) {
+    public void setTechStacks(List<com.yongjincompany.devblind.user.entity.TechStack> stacks) {
         this.userTechStacks.clear();
-        for (TechStack stack : stacks) {
-            this.userTechStacks.add(UserTechStack.builder()
+        for (com.yongjincompany.devblind.user.entity.TechStack stack : stacks) {
+            this.userTechStacks.add(com.yongjincompany.devblind.user.entity.UserTechStack.builder()
                     .user(this)
                     .techStack(stack)
                     .build());

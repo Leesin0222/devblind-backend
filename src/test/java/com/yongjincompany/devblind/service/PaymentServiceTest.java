@@ -1,15 +1,15 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.payment.service;
 
-import com.yongjincompany.devblind.common.TossPaymentClient;
-import com.yongjincompany.devblind.dto.PaymentRequest;
-import com.yongjincompany.devblind.dto.PaymentResponse;
-import com.yongjincompany.devblind.entity.Payment;
-import com.yongjincompany.devblind.entity.PaymentProduct;
-import com.yongjincompany.devblind.entity.User;
-import com.yongjincompany.devblind.exception.ApiException;
-import com.yongjincompany.devblind.repository.PaymentProductRepository;
-import com.yongjincompany.devblind.repository.PaymentRepository;
-import com.yongjincompany.devblind.repository.UserRepository;
+import com.yongjincompany.devblind.common.util.TossPaymentClient;
+import com.yongjincompany.devblind.payment.dto.PaymentRequest;
+import com.yongjincompany.devblind.payment.dto.PaymentResponse;
+import com.yongjincompany.devblind.payment.entity.PaymentHistory;
+import com.yongjincompany.devblind.payment.entity.PaymentProduct;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.common.exception.ApiException;
+import com.yongjincompany.devblind.payment.repository.PaymentProductRepository;
+import com.yongjincompany.devblind.payment.repository.PaymentHistoryRepository;
+import com.yongjincompany.devblind.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,13 +23,18 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class PaymentServiceTest {
 
     @Mock
-    private PaymentRepository paymentRepository;
+    private PaymentHistoryRepository paymentHistoryRepository;
     @Mock
     private PaymentProductRepository paymentProductRepository;
     @Mock
@@ -38,7 +43,7 @@ class PaymentServiceTest {
     private TossPaymentClient tossPaymentClient;
 
     @InjectMocks
-    private PaymentService paymentService;
+    private com.yongjincompany.devblind.payment.service.PaymentService paymentService;
 
     private User testUser;
     private PaymentProduct testProduct;
@@ -58,7 +63,7 @@ class PaymentServiceTest {
                 .description("테스트 상품입니다")
                 .build();
 
-        paymentRequest = new PaymentRequest(1L, "success_url", "fail_url");
+        paymentRequest = new PaymentRequest(1L, "CARD", "success_url", "fail_url");
     }
 
     @Test
@@ -69,15 +74,15 @@ class PaymentServiceTest {
         when(paymentProductRepository.findById(1L)).thenReturn(Optional.of(testProduct));
         when(tossPaymentClient.requestPayment(anyString(), anyString(), anyLong(), anyString(), anyString()))
                 .thenReturn("payment_url");
-        when(paymentRepository.save(any(Payment.class))).thenReturn(Payment.builder().id(1L).build());
+        when(paymentHistoryRepository.save(any(PaymentHistory.class))).thenReturn(PaymentHistory.builder().id(1L).build());
 
         // when
-        PaymentResponse response = paymentService.requestPayment(1L, paymentRequest);
+        PaymentResponse response = paymentService.requestPayment(paymentRequest, 1L);
 
         // then
         assertThat(response).isNotNull();
         assertThat(response.paymentUrl()).isEqualTo("payment_url");
-        verify(paymentRepository).save(any(Payment.class));
+        verify(paymentHistoryRepository).save(any(PaymentHistory.class));
     }
 
     @Test
@@ -87,7 +92,7 @@ class PaymentServiceTest {
         when(userRepository.findByIdAndDeletedFalse(1L)).thenReturn(Optional.empty());
 
         // when & then
-        assertThatThrownBy(() -> paymentService.requestPayment(1L, paymentRequest))
+        assertThatThrownBy(() -> paymentService.requestPayment(paymentRequest, 1L))
                 .isInstanceOf(ApiException.class);
     }
 
@@ -99,7 +104,7 @@ class PaymentServiceTest {
         when(paymentProductRepository.findById(1L)).thenReturn(Optional.empty());
 
         // when & then
-        assertThatThrownBy(() -> paymentService.requestPayment(1L, paymentRequest))
+        assertThatThrownBy(() -> paymentService.requestPayment(paymentRequest, 1L))
                 .isInstanceOf(ApiException.class);
     }
 
@@ -113,7 +118,7 @@ class PaymentServiceTest {
                 .thenThrow(new RuntimeException("토스 API 오류"));
 
         // when & then
-        assertThatThrownBy(() -> paymentService.requestPayment(1L, paymentRequest))
+        assertThatThrownBy(() -> paymentService.requestPayment(paymentRequest, 1L))
                 .isInstanceOf(ApiException.class);
     }
 }

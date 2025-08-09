@@ -1,7 +1,8 @@
-package com.yongjincompany.devblind.entity;
+package com.yongjincompany.devblind.matching.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.yongjincompany.devblind.user.entity.User;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,6 +28,7 @@ public class AdditionalRecommendationUsage {
     @Column(nullable = false)
     private LocalDate usageDate; // 사용 날짜
 
+    @Builder.Default
     @Column(nullable = false)
     private Integer usageCount = 0; // 사용 횟수
 

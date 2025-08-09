@@ -28,7 +28,7 @@ public class AuthService {
 
 
     public TokenRefreshResponse refreshAccessToken(TokenRefreshRequest request) {
-        String refreshToken = request.getRefreshToken();
+        String refreshToken = request.refreshToken();
 
         // 1. Refresh Token 유효성 검증
         if (!jwtProvider.validateToken(refreshToken)) {
@@ -50,10 +50,7 @@ public class AuthService {
         // 5. Redis에 새로운 RefreshToken 저장
         refreshTokenService.saveRefreshToken(userId, newRefreshToken);
 
-        return TokenRefreshResponse.builder()
-                .accessToken(newAccessToken)
-                .refreshToken(newRefreshToken)
-                .build();
+        return new TokenRefreshResponse(newAccessToken, newRefreshToken);
     }
 
     public VerifyCodeResponse verifyCodeAndLoginOrSignup(String phone, String code) {
@@ -75,7 +72,7 @@ public class AuthService {
 
             refreshTokenService.saveRefreshToken(userId, refreshToken);
 
-            AuthResponse authResponse = new AuthResponse(accessToken, refreshToken);
+            AuthResponse authResponse = new AuthResponse(accessToken, refreshToken, user.get().getId(), user.get().getNickname());
             return new VerifyCodeResponse(true, authResponse, null);
         } else {
             String signupToken = UUID.randomUUID().toString();

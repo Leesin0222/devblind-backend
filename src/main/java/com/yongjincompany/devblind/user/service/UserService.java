@@ -9,11 +9,13 @@ import com.yongjincompany.devblind.common.exception.ApiException;
 import com.yongjincompany.devblind.common.exception.ErrorCode;
 import com.yongjincompany.devblind.user.repository.UserRepository;
 import com.yongjincompany.devblind.user.repository.UserTechStackRepository;
+import com.yongjincompany.devblind.user.repository.TechStackRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.time.LocalDate;
 
 @Slf4j
 @Service
@@ -22,6 +24,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserTechStackRepository userTechStackRepository;
+    private final TechStackRepository techStackRepository;
 
     public void updateUser(String phoneNumber, UpdateUserRequest request) {
         log.info("사용자 프로필 업데이트 요청: phoneNumber={}", phoneNumber);
@@ -31,13 +34,15 @@ public class UserService {
 
         user.updateProfile(
                 request.nickname(),
-                request.birth(),
-                request.gender(),
+                request.birth() != null ? LocalDate.parse(request.birth()) : null,
+                User.Gender.valueOf(request.gender()),
                 request.profileImageUrl()
         );
 
-        List<TechStack> stacks = userTechStackRepository.findByIdIn(request.techStackIds());
-        user.setTechStacks(stacks);
+        if (request.techStackIds() != null && !request.techStackIds().isEmpty()) {
+            List<TechStack> stacks = techStackRepository.findByIdIn(request.techStackIds());
+            user.setTechStacks(stacks);
+        }
 
         userRepository.save(user);
         log.info("사용자 프로필 업데이트 완료: userId={}", user.getId());

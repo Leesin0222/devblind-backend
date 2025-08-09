@@ -1,10 +1,16 @@
 package com.yongjincompany.devblind.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yongjincompany.devblind.dto.chat.ChatMessageRequest;
-import com.yongjincompany.devblind.entity.*;
-import com.yongjincompany.devblind.repository.*;
-import com.yongjincompany.devblind.service.JwtProvider;
+import com.yongjincompany.devblind.chat.dto.ChatMessageRequest;
+import com.yongjincompany.devblind.chat.entity.ChatMessage;
+import com.yongjincompany.devblind.chat.entity.ChatRoom;
+import com.yongjincompany.devblind.matching.entity.Matching;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.chat.repository.ChatMessageRepository;
+import com.yongjincompany.devblind.chat.repository.ChatRoomRepository;
+import com.yongjincompany.devblind.matching.repository.MatchingRepository;
+import com.yongjincompany.devblind.user.repository.UserRepository;
+import com.yongjincompany.devblind.common.security.JwtProvider;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,8 +27,11 @@ import org.springframework.web.context.WebApplicationContext;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureWebMvc
@@ -83,13 +92,13 @@ class ChatControllerIntegrationTest {
         matching = Matching.builder()
                 .user1(user1)
                 .user2(user2)
-                .isActive(true)
+                .status(Matching.Status.MATCHED)
                 .createdAt(LocalDateTime.now())
                 .build();
         matching = matchingRepository.save(matching);
 
         // JWT 토큰 생성
-        user1Token = jwtProvider.generateToken(user1.getId());
+        user1Token = jwtProvider.generateAccessToken(user1.getId());
     }
 
     @Test
@@ -143,7 +152,7 @@ class ChatControllerIntegrationTest {
         ChatMessageRequest request = new ChatMessageRequest(
                 matching.getId(), 
                 "안녕하세요!", 
-                ChatMessage.MessageType.TEXT
+                "TEXT"
         );
 
         // when & then
@@ -198,12 +207,12 @@ class ChatControllerIntegrationTest {
                 .build();
         otherUser = userRepository.save(otherUser);
 
-        String otherUserToken = jwtProvider.generateToken(otherUser.getId());
+        String otherUserToken = jwtProvider.generateAccessToken(otherUser.getId());
 
         ChatMessageRequest request = new ChatMessageRequest(
                 matching.getId(), 
                 "안녕하세요!", 
-                ChatMessage.MessageType.TEXT
+                "TEXT"
         );
 
         // when & then

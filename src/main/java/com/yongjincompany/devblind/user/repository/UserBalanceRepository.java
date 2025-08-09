@@ -1,7 +1,16 @@
-package com.yongjincompany.devblind.repository;
+package com.yongjincompany.devblind.user.repository;
 
-import com.yongjincompany.devblind.entity.UserBalance;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.user.entity.UserBalance;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
+@Repository
 public interface UserBalanceRepository extends JpaRepository<UserBalance, Long> {
+    
+    Optional<UserBalance> findByUser(User user);
+    
+    Optional<UserBalance> findByUserId(Long userId);
 }

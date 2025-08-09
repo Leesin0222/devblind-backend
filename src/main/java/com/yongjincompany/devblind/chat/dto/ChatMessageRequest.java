@@ -1,21 +1,23 @@
-package com.yongjincompany.devblind.dto.chat;
+package com.yongjincompany.devblind.chat.dto;
 
-import com.yongjincompany.devblind.entity.ChatMessage;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public record ChatMessageRequest(
-        @NotNull
-        Long matchingId,
-        
-        @NotBlank
-        String content,
-        
-        ChatMessage.MessageType messageType
+    @NotNull(message = "매칭 ID는 필수입니다")
+    Long matchingId,
+    
+    @NotBlank(message = "메시지 내용은 필수입니다")
+    String content,
+    
+    String messageType
 ) {
     public ChatMessageRequest {
         if (messageType == null) {
-            messageType = ChatMessage.MessageType.TEXT;
+            messageType = "TEXT";
         }
     }
 }

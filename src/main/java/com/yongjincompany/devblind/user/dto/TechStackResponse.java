@@ -1,9 +1,18 @@
-package com.yongjincompany.devblind.dto.tech_stack;
+package com.yongjincompany.devblind.user.dto;
 
-import com.yongjincompany.devblind.entity.TechStack;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public record TechStackResponse(Long id, String name) {
-    public static TechStackResponse from(TechStack stack) {
-        return new TechStackResponse(stack.getId(), stack.getName());
+public record TechStackResponse(
+    Long id,
+    String name
+) {
+    public static TechStackResponse from(com.yongjincompany.devblind.user.entity.TechStack stack) {
+        return new TechStackResponse(
+            stack.getId(),
+            stack.getName()
+        );
     }
 }

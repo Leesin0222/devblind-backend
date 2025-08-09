@@ -1,25 +1,30 @@
-package com.yongjincompany.devblind.dto;
+package com.yongjincompany.devblind.payment.dto;
 
-import com.yongjincompany.devblind.entity.PaymentHistory;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 public record PaymentHistoryResponse(
-        String orderId,
-        String productName,
-        Long amount,
-        Long coin,
-        String status,
-        LocalDateTime createdAt
+    Long id,
+    String paymentId,
+    String productName,
+    Long amount,
+    String status,
+    LocalDateTime paidAt,
+    String refundStatus
 ) {
-    public static PaymentHistoryResponse from(PaymentHistory history, String productName) {
+    public static PaymentHistoryResponse from(com.yongjincompany.devblind.payment.entity.PaymentHistory history, String productName) {
         return new PaymentHistoryResponse(
-                history.getOrderId(),
-                productName,
-                history.getAmount(),
-                history.getCoin(),
-                history.getStatus().name(),
-                history.getCreatedAt()
+            history.getId(),
+            history.getPaymentId(),
+            productName,
+            history.getAmount(),
+            history.getStatus().name(),
+            history.getPaidAt(),
+            history.getRefundStatus().name()
         );
     }
 }

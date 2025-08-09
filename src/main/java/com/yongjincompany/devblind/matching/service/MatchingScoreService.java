@@ -1,8 +1,8 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.matching.service;
 
-import com.yongjincompany.devblind.entity.MatchingProfile;
-import com.yongjincompany.devblind.entity.TechStack;
-import com.yongjincompany.devblind.entity.User;
+import com.yongjincompany.devblind.matching.entity.MatchingProfile;
+import com.yongjincompany.devblind.user.entity.TechStack;
+import com.yongjincompany.devblind.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

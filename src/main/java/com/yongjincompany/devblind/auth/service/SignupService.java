@@ -1,14 +1,14 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.auth.service;
 
-import com.yongjincompany.devblind.common.JwtProvider;
-import com.yongjincompany.devblind.dto.auth.AuthResponse;
-import com.yongjincompany.devblind.dto.auth.SignupRequest;
-import com.yongjincompany.devblind.entity.TechStack;
-import com.yongjincompany.devblind.entity.User;
-import com.yongjincompany.devblind.exception.ApiException;
-import com.yongjincompany.devblind.exception.ErrorCode;
-import com.yongjincompany.devblind.repository.TechStackRepository;
-import com.yongjincompany.devblind.repository.UserRepository;
+import com.yongjincompany.devblind.common.security.JwtProvider;
+import com.yongjincompany.devblind.auth.dto.AuthResponse;
+import com.yongjincompany.devblind.auth.dto.SignupRequest;
+import com.yongjincompany.devblind.user.entity.TechStack;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.common.exception.ApiException;
+import com.yongjincompany.devblind.common.exception.ErrorCode;
+import com.yongjincompany.devblind.user.repository.TechStackRepository;
+import com.yongjincompany.devblind.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,9 @@ public class SignupService {
             throw new ApiException(ErrorCode.VALIDATION_ERROR);
         }
 
-        List<TechStack> stacks = techStackRepository.findByIdIn(request.techStackIds());
+        List<TechStack> stacks = request.techStackIds() != null && !request.techStackIds().isEmpty() 
+                ? techStackRepository.findByIdIn(request.techStackIds()) 
+                : List.of();
 
         User user = User.builder()
                 .phoneNumber(phoneNumber)
@@ -58,7 +60,7 @@ public class SignupService {
         String refreshToken = jwtProvider.generateRefreshToken(userId);
         refreshTokenService.saveRefreshToken(userId, refreshToken);
 
-        return new AuthResponse(accessToken, refreshToken);
+        return new AuthResponse(accessToken, refreshToken, user.getId(), user.getNickname());
     }
 }
 

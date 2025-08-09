@@ -1,7 +1,12 @@
-package com.yongjincompany.devblind.dto.auth;
+package com.yongjincompany.devblind.auth.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public record VerifyCodeResponse(
-        boolean isRegistered,
-        AuthResponse authResponse,    // isRegistered == true 일 때 access/refresh 토큰 반환
-        String signupToken            // isRegistered == false 일 때 회원가입용 토큰 반환
+    boolean isRegistered,
+    AuthResponse authResponse,
+    String signupToken
 ) {}

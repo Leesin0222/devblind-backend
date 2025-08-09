@@ -1,12 +1,18 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.chat.service;
 
-import com.yongjincompany.devblind.dto.chat.ChatMessageRequest;
-import com.yongjincompany.devblind.dto.chat.ChatMessageResponse;
-import com.yongjincompany.devblind.dto.chat.ChatRoomResponse;
-import com.yongjincompany.devblind.entity.*;
-import com.yongjincompany.devblind.exception.ApiException;
-import com.yongjincompany.devblind.exception.ErrorCode;
-import com.yongjincompany.devblind.repository.*;
+import com.yongjincompany.devblind.chat.dto.ChatMessageRequest;
+import com.yongjincompany.devblind.chat.dto.ChatMessageResponse;
+import com.yongjincompany.devblind.chat.dto.ChatRoomResponse;
+import com.yongjincompany.devblind.chat.entity.ChatMessage;
+import com.yongjincompany.devblind.chat.entity.ChatRoom;
+import com.yongjincompany.devblind.matching.entity.Matching;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.common.exception.ApiException;
+import com.yongjincompany.devblind.common.exception.ErrorCode;
+import com.yongjincompany.devblind.chat.repository.ChatMessageRepository;
+import com.yongjincompany.devblind.chat.repository.ChatRoomRepository;
+import com.yongjincompany.devblind.matching.repository.MatchingRepository;
+import com.yongjincompany.devblind.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -115,7 +121,7 @@ public class ChatService {
                 .matchingId(request.matchingId())
                 .senderId(userId)
                 .content(request.content())
-                .messageType(request.messageType())
+                .messageType(ChatMessage.MessageType.valueOf(request.messageType()))
                 .build();
 
         ChatMessage savedMessage = chatMessageRepository.save(message);

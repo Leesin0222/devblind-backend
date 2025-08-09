@@ -1,6 +1,7 @@
-package com.yongjincompany.devblind.common;
+package com.yongjincompany.devblind.common.util;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,12 +17,13 @@ import java.util.Map;
 public class TossRefundClient {
 
     private final RestTemplate restTemplate;
-    private static final String SECRET_KEY = "sk_test_xxx";
+    @Value("${toss.refund.secret-key}")
+    private String secretKey;
     private static final String REFUND_API_URL = "https://api.tosspayments.com/v1/payments/{paymentKey}/cancel";
 
     public boolean refund(String paymentKey, Long amount, String reason) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBasicAuth(Base64.getEncoder().encodeToString((SECRET_KEY + ":").getBytes()));
+        headers.setBasicAuth(Base64.getEncoder().encodeToString((secretKey + ":").getBytes()));
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Map<String, Object> body = Map.of(

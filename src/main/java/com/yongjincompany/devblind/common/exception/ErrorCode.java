@@ -23,7 +23,12 @@ public enum ErrorCode {
     
     // 결제 관련
     INSUFFICIENT_COINS("INSUFFICIENT_COINS", "코인이 부족합니다."),
+    INSUFFICIENT_BALANCE("INSUFFICIENT_BALANCE", "잔액이 부족합니다."),
     ADDITIONAL_RECOMMENDATION_LIMIT_EXCEEDED("ADDITIONAL_RECOMMENDATION_LIMIT_EXCEEDED", "오늘 추가 추천 사용 횟수를 초과했습니다."),
+    PAYMENT_NOT_FOUND("PAYMENT_NOT_FOUND", "결제 정보를 찾을 수 없습니다."),
+    PRODUCT_NOT_FOUND("PRODUCT_NOT_FOUND", "상품을 찾을 수 없습니다."),
+    INVALID_REFUND_REQUEST("INVALID_REFUND_REQUEST", "잘못된 환불 요청입니다."),
+    REFUND_FAILED("REFUND_FAILED", "환불 처리에 실패했습니다."),
     
     // 채팅 관련
     CHAT_ROOM_NOT_FOUND("CHAT_ROOM_NOT_FOUND", "채팅방을 찾을 수 없습니다."),
@@ -31,10 +36,51 @@ public enum ErrorCode {
     
     // 매칭 관련
     MATCHING_NOT_FOUND("MATCHING_NOT_FOUND", "매칭을 찾을 수 없습니다."),
+    MATCHING_PROFILE_NOT_FOUND("MATCHING_PROFILE_NOT_FOUND", "매칭 프로필을 찾을 수 없습니다."),
+    DAILY_RECOMMENDATION_LIMIT_EXCEEDED("DAILY_RECOMMENDATION_LIMIT_EXCEEDED", "오늘 추천 한도를 초과했습니다."),
+    
+    // 권한 관련
+    FORBIDDEN("FORBIDDEN", "접근 권한이 없습니다."),
+    
+    // SMS 관련
+    SMS_SEND_FAILED("SMS_SEND_FAILED", "SMS 발송에 실패했습니다."),
     
     // 서버 오류
     SERVER_ERROR("SERVER_ERROR", "서버 오류가 발생했습니다.");
 
     private final String code;
     private final String message;
+    
+    public int getStatus() {
+        switch (this) {
+            case UNAUTHORIZED:
+                return 401;
+            case FORBIDDEN:
+                return 403;
+            case VALIDATION_ERROR:
+            case INVALID_TOKEN:
+            case INVALID_REFRESH_TOKEN:
+            case INVALID_CODE:
+            case USER_NOT_FOUND:
+            case FILE_UPLOAD_FAILED:
+            case INVALID_FILE_TYPE:
+            case FILE_SIZE_EXCEEDED:
+            case INSUFFICIENT_COINS:
+            case INSUFFICIENT_BALANCE:
+            case ADDITIONAL_RECOMMENDATION_LIMIT_EXCEEDED:
+            case PAYMENT_NOT_FOUND:
+            case PRODUCT_NOT_FOUND:
+            case INVALID_REFUND_REQUEST:
+            case CHAT_ROOM_NOT_FOUND:
+            case CHAT_MESSAGE_NOT_FOUND:
+            case MATCHING_NOT_FOUND:
+            case MATCHING_PROFILE_NOT_FOUND:
+            case DAILY_RECOMMENDATION_LIMIT_EXCEEDED:
+            case SMS_SEND_FAILED:
+                return 400;
+            case SERVER_ERROR:
+            default:
+                return 500;
+        }
+    }
 }

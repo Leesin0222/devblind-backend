@@ -1,7 +1,7 @@
 package com.yongjincompany.devblind.controller;
 
-import com.yongjincompany.devblind.dto.PaymentProductResponse;
-import com.yongjincompany.devblind.service.PaymentProductService;
+import com.yongjincompany.devblind.payment.dto.PaymentProductResponse;
+import com.yongjincompany.devblind.payment.service.PaymentProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,10 +1,10 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.auth.service;
 
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
-import com.yongjincompany.devblind.repository.DeviceTokenRepository;
+import com.yongjincompany.devblind.user.repository.DeviceTokenRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

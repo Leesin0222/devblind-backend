@@ -1,17 +1,17 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.payment.service;
 
-import com.yongjincompany.devblind.common.TossPaymentClient;
-import com.yongjincompany.devblind.dto.PaymentRequest;
-import com.yongjincompany.devblind.dto.PaymentResponse;
-import com.yongjincompany.devblind.dto.TossWebhookRequest;
-import com.yongjincompany.devblind.entity.PaymentHistory;
-import com.yongjincompany.devblind.entity.PaymentProduct;
-import com.yongjincompany.devblind.entity.User;
-import com.yongjincompany.devblind.exception.ApiException;
-import com.yongjincompany.devblind.exception.ErrorCode;
-import com.yongjincompany.devblind.repository.PaymentHistoryRepository;
-import com.yongjincompany.devblind.repository.PaymentProductRepository;
-import com.yongjincompany.devblind.repository.UserRepository;
+import com.yongjincompany.devblind.common.util.TossPaymentClient;
+import com.yongjincompany.devblind.payment.dto.PaymentRequest;
+import com.yongjincompany.devblind.payment.dto.PaymentResponse;
+import com.yongjincompany.devblind.payment.dto.TossWebhookRequest;
+import com.yongjincompany.devblind.payment.entity.PaymentHistory;
+import com.yongjincompany.devblind.payment.entity.PaymentProduct;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.common.exception.ApiException;
+import com.yongjincompany.devblind.common.exception.ErrorCode;
+import com.yongjincompany.devblind.payment.repository.PaymentHistoryRepository;
+import com.yongjincompany.devblind.payment.repository.PaymentProductRepository;
+import com.yongjincompany.devblind.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ public class PaymentService {
     private final PaymentHistoryRepository paymentHistoryRepository;
     private final UserRepository userRepository;
     private final TossPaymentClient tossPaymentClient; // 토스 결제 통신 처리
-    private final UserBalanceService userBalanceService;
+    private final com.yongjincompany.devblind.user.service.UserBalanceService userBalanceService;
 
     @Transactional
     public PaymentResponse requestPayment(PaymentRequest request, Long userId) {
@@ -50,7 +50,7 @@ public class PaymentService {
                 .productId(product.getId())
                 .amount(product.getAmount())
                 .coin(product.getCoin())
-                .status(PaymentHistory.Status.PENDING)
+                .status(PaymentHistory.PaymentStatus.PENDING)
                 .build();
 
         paymentHistoryRepository.save(paymentHistory);
@@ -65,11 +65,11 @@ public class PaymentService {
         );
 
         log.info("결제 URL 생성 완료: userId={}, orderId={}", userId, orderId);
-        return new PaymentResponse(paymentUrl);
+        return new PaymentResponse(null, orderId, product.getAmount(), paymentUrl, "PENDING");
     }
 
     @Transactional
-    public void handlePaymentResult(TossWebhookRequest request) {
+    public void handleTossWebhook(TossWebhookRequest request) {
         log.info("결제 결과 처리: orderId={}, status={}", request.orderId(), request.status());
         
         PaymentHistory paymentHistory = paymentHistoryRepository.findByOrderId(request.orderId())
@@ -78,7 +78,7 @@ public class PaymentService {
                     return new ApiException(ErrorCode.PAYMENT_NOT_FOUND);
                 });
 
-        if (paymentHistory.getStatus() == PaymentHistory.Status.SUCCESS) {
+        if (paymentHistory.getStatus() == PaymentHistory.PaymentStatus.COMPLETED) {
             log.info("이미 처리된 결제: orderId={}", request.orderId());
             return;
         }

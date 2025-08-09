@@ -1,10 +1,10 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.payment.service;
 
-import com.yongjincompany.devblind.dto.PaymentHistoryResponse;
-import com.yongjincompany.devblind.entity.PaymentHistory;
-import com.yongjincompany.devblind.entity.PaymentProduct;
-import com.yongjincompany.devblind.repository.PaymentHistoryRepository;
-import com.yongjincompany.devblind.repository.PaymentProductRepository;
+import com.yongjincompany.devblind.payment.dto.PaymentHistoryResponse;
+import com.yongjincompany.devblind.payment.entity.PaymentHistory;
+import com.yongjincompany.devblind.payment.entity.PaymentProduct;
+import com.yongjincompany.devblind.payment.repository.PaymentHistoryRepository;
+import com.yongjincompany.devblind.payment.repository.PaymentProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +19,7 @@ public class PaymentHistoryService {
     private final PaymentHistoryRepository paymentHistoryRepository;
     private final PaymentProductRepository paymentProductRepository;
 
-    public List<PaymentHistoryResponse> getUserPaymentHistories(Long userId) {
+    public List<PaymentHistoryResponse> getPaymentHistories(Long userId) {
         List<PaymentHistory> histories = paymentHistoryRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
 
         // 상품명 매핑

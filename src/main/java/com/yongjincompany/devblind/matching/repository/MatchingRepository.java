@@ -1,7 +1,7 @@
-package com.yongjincompany.devblind.repository;
+package com.yongjincompany.devblind.matching.repository;
 
-import com.yongjincompany.devblind.entity.Matching;
-import com.yongjincompany.devblind.entity.User;
+import com.yongjincompany.devblind.matching.entity.Matching;
+import com.yongjincompany.devblind.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

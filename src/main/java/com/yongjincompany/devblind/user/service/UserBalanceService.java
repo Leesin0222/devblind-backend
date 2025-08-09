@@ -1,13 +1,13 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.user.service;
 
-import com.yongjincompany.devblind.entity.User;
-import com.yongjincompany.devblind.entity.UserBalance;
-import com.yongjincompany.devblind.entity.UserBalanceTransaction;
-import com.yongjincompany.devblind.exception.ApiException;
-import com.yongjincompany.devblind.exception.ErrorCode;
-import com.yongjincompany.devblind.repository.UserBalanceRepository;
-import com.yongjincompany.devblind.repository.UserBalanceTransactionRepository;
-import com.yongjincompany.devblind.repository.UserRepository;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.user.entity.UserBalance;
+import com.yongjincompany.devblind.user.entity.UserBalanceTransaction;
+import com.yongjincompany.devblind.common.exception.ApiException;
+import com.yongjincompany.devblind.common.exception.ErrorCode;
+import com.yongjincompany.devblind.user.repository.UserBalanceRepository;
+import com.yongjincompany.devblind.user.repository.UserBalanceTransactionRepository;
+import com.yongjincompany.devblind.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

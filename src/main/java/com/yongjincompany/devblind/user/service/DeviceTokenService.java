@@ -1,11 +1,11 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.user.service;
 
-import com.yongjincompany.devblind.entity.DeviceToken;
-import com.yongjincompany.devblind.entity.User;
-import com.yongjincompany.devblind.exception.ApiException;
-import com.yongjincompany.devblind.exception.ErrorCode;
-import com.yongjincompany.devblind.repository.DeviceTokenRepository;
-import com.yongjincompany.devblind.repository.UserRepository;
+import com.yongjincompany.devblind.user.entity.DeviceToken;
+import com.yongjincompany.devblind.user.entity.User;
+import com.yongjincompany.devblind.common.exception.ApiException;
+import com.yongjincompany.devblind.common.exception.ErrorCode;
+import com.yongjincompany.devblind.user.repository.DeviceTokenRepository;
+import com.yongjincompany.devblind.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

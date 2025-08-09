@@ -1,7 +1,7 @@
 package com.yongjincompany.devblind.controller;
 
-import com.yongjincompany.devblind.dto.tech_stack.TechStackResponse;
-import com.yongjincompany.devblind.service.TechStackService;
+import com.yongjincompany.devblind.user.dto.TechStackResponse;
+import com.yongjincompany.devblind.user.service.TechStackService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

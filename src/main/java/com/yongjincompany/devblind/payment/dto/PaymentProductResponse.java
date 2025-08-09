@@ -1,19 +1,24 @@
-package com.yongjincompany.devblind.dto;
+package com.yongjincompany.devblind.payment.dto;
 
-import com.yongjincompany.devblind.entity.PaymentProduct;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public record PaymentProductResponse(
-        Long id,
-        String name,
-        Long amount,
-        Long coin
+    Long id,
+    String name,
+    Long price,
+    Long coinAmount,
+    String description
 ) {
-    public static PaymentProductResponse from(PaymentProduct product) {
+    public static PaymentProductResponse from(com.yongjincompany.devblind.payment.entity.PaymentProduct product) {
         return new PaymentProductResponse(
-                product.getId(),
-                product.getName(),
-                product.getAmount(),
-                product.getCoin()
+            product.getId(),
+            product.getName(),
+            product.getPrice(),
+            product.getCoinAmount(),
+            product.getDescription()
         );
     }
 }

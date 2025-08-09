@@ -1,4 +1,4 @@
-package com.yongjincompany.devblind.entity;
+package com.yongjincompany.devblind.payment.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,20 +10,31 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class PaymentProduct {
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
+    @Column(nullable = false, unique = true)
+    private String name;
+    
     @Column(nullable = false)
-    private String name; // 예: "100코인", "300코인"
-
+    private Long price;
+    
     @Column(nullable = false)
-    private Long amount; // 실제 결제 금액 (원)
-
+    private Long coinAmount;
+    
     @Column(nullable = false)
-    private Long coin; // 지급될 코인 수
-
-    @Column(nullable = false)
+    @Builder.Default
     private boolean active = true;
+    
+    private String description;
+    
+    public Long getAmount() {
+        return this.price;
+    }
+    
+    public Integer getCoin() {
+        return this.coinAmount.intValue();
+    }
 }

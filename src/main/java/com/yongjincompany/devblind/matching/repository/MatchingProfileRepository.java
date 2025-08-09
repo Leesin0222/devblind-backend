@@ -1,7 +1,7 @@
-package com.yongjincompany.devblind.repository;
+package com.yongjincompany.devblind.matching.repository;
 
-import com.yongjincompany.devblind.entity.MatchingProfile;
-import com.yongjincompany.devblind.entity.User;
+import com.yongjincompany.devblind.matching.entity.MatchingProfile;
+import com.yongjincompany.devblind.user.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

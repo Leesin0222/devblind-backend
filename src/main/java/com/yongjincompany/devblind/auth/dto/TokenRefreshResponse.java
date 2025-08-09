@@ -1,13 +1,11 @@
-package com.yongjincompany.devblind.dto.auth;
+package com.yongjincompany.devblind.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-@Getter
-@Builder
-@AllArgsConstructor
-public class TokenRefreshResponse {
-    private String accessToken;
-    private String refreshToken;
-}
+public record TokenRefreshResponse(
+    String accessToken,
+    String refreshToken
+) {}

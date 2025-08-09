@@ -1,4 +1,4 @@
-package com.yongjincompany.devblind.service;
+package com.yongjincompany.devblind.auth.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;

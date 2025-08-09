@@ -1,8 +1,8 @@
-package com.yongjincompany.devblind.controller;
+package com.yongjincompany.devblind.payment.controller;
 
-import com.yongjincompany.devblind.common.AuthUser;
-import com.yongjincompany.devblind.dto.RefundRequest;
-import com.yongjincompany.devblind.service.RefundService;
+import com.yongjincompany.devblind.common.security.AuthUser;
+import com.yongjincompany.devblind.payment.dto.RefundRequest;
+import com.yongjincompany.devblind.payment.service.RefundService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class RefundController {
             @AuthUser Long userId,
             @RequestBody @Valid RefundRequest request
     ) {
-        refundService.requestRefund(userId, request);
+        refundService.requestRefund(request, userId);
         return ResponseEntity.ok().build();
     }
 }

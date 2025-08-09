@@ -1,6 +1,7 @@
-package com.yongjincompany.devblind.common;
+package com.yongjincompany.devblind.common.util;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -17,12 +18,13 @@ public class TossPaymentClient {
 
     private final RestTemplate restTemplate;
 
-    private static final String SECRET_KEY = "test_sk_XXXX"; // 토스 시크릿 키
+    @Value("${toss.payment.secret-key}")
+    private String secretKey;
     private static final String PAYMENT_URL = "https://api.tosspayments.com/v1/payments";
 
     public String requestPayment(String orderId, String orderName, Long amount, String successUrl, String failUrl) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBasicAuth(Base64.getEncoder().encodeToString((SECRET_KEY + ":").getBytes()));
+        headers.setBasicAuth(Base64.getEncoder().encodeToString((secretKey + ":").getBytes()));
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         Map<String, Object> body = Map.of(

@@ -1,6 +1,6 @@
-package com.yongjincompany.devblind.dto.chat;
+package com.yongjincompany.devblind.chat.dto;
 
-import com.yongjincompany.devblind.entity.ChatMessage;
+import com.yongjincompany.devblind.chat.entity.ChatMessage;
 import jakarta.validation.constraints.NotBlank;
 
 public record ChatMessageWebSocketRequest(

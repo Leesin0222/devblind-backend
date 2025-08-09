@@ -1,7 +1,8 @@
-package com.yongjincompany.devblind.entity;
+package com.yongjincompany.devblind.matching.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import com.yongjincompany.devblind.user.entity.User;
 
 import java.time.LocalDateTime;
 
@@ -31,8 +32,7 @@ public class UserLike {
     @Column(nullable = false)
     private LikeType likeType; // LIKE, DISLIKE
 
-    @Column(nullable = false)
-    @Index(name = "idx_user_likes_created_at")
+        @Column(nullable = false)
     private LocalDateTime createdAt;
 
     public enum LikeType {
@@ -54,5 +54,9 @@ public class UserLike {
 
     public boolean isPullRequest() {
         return this.likeType == LikeType.PULL_REQUEST;
+    }
+    
+    public User getFromUser() {
+        return this.user;
     }
 }
