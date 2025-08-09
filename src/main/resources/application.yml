@@ -64,6 +64,6 @@ springdoc:
     operations-sorter: alpha
     display-request-duration: true
     filter: true
-  packages-to-scan: com.yongjincompany.devblind.controller
+  packages-to-scan: com.yongjincompany.devblind
   default-produces-media-type: application/json
   default-consumes-media-type: application/json

@@ -9,8 +9,6 @@
 [![Redis](https://img.shields.io/badge/Redis-7.0-red.svg)](https://redis.io/)
 [![Swagger](https://img.shields.io/badge/API%20Docs-Swagger-85EA2D.svg)](http://localhost:8080/swagger-ui.html)
 
----
-
 ## 목차
 
 - [프로젝트 개요](#프로젝트-개요)
@@ -23,8 +21,6 @@
 - [모니터링](#모니터링)
 - [배포](#배포)
 
----
-
 ## 프로젝트 개요
 
 **DevBlind**는 개발자들을 위한 특별한 소개팅 플랫폼입니다. 기존의 외모 중심 매칭과 달리, **기술 스택**, **취향**, **가치관**을 기반으로 한 **스마트 매칭 알고리즘**을 제공합니다.
@@ -35,8 +31,6 @@
 - **프라이버시 보호**: 철저한 개인정보 보호 및 블라인드 시스템
 - **실시간 소통**: WebSocket 기반 실시간 채팅
 
----
-
 ## 주요 기능
 
 ### **인증 시스템**
@@ -45,8 +39,8 @@
 - **Spring Security**: 엔터프라이즈급 보안 설정
 
 ### **스마트 매칭**
-- **AI 기반 추천**: 기술 스택, 위치, 나이, 취향 종합 분석
-- **점수 기반 매칭**: 상세한 매칭 점수 및 설명 제공
+- **점수 기반 추천**: 기술 스택, 위치, 나이, 취향 종합 분석
+- **가중치 알고리즘**: 각 요소별 가중치를 적용한 매칭 점수 계산
 - **Pull Request 시스템**: 특별한 관심 표현 방식
 
 ### **실시간 채팅**
@@ -66,8 +60,6 @@
 ### **파일 관리**
 - **AWS S3**: 프로필 이미지 업로드
 - **파일 검증**: 형식 및 크기 검증
-
----
 
 ## 아키텍처
 
@@ -91,8 +83,6 @@ graph TB
 - **도메인 주도 설계**: 각 기능별 독립적인 패키지 구조
 - **레이어드 아키텍처**: Controller → Service → Repository
 - **의존성 역전**: 인터페이스 기반 느슨한 결합
-
----
 
 ## API 문서
 
@@ -122,6 +112,11 @@ GET  /tech-stacks           # 기술 스택 목록 조회
 GET  /user-balance          # 사용자 잔액 조회
 ```
 
+#### 파일 업로드
+```http
+POST /api/files/profile-image # 프로필 이미지 업로드
+```
+
 #### 매칭
 ```http
 GET  /matching/recommendations # 추천 매칭 목록
@@ -138,8 +133,9 @@ POST /matching/profile        # 매칭 프로필 생성/수정
 #### 채팅
 ```http
 GET  /chat/rooms              # 채팅방 목록
-GET  /chat/rooms/{roomId}/messages # 메시지 목록
-POST /chat/rooms/{roomId}/messages # 메시지 전송
+GET  /chat/rooms/{matchingId}/messages # 메시지 목록
+POST /chat/rooms/{matchingId}/messages # 메시지 전송
+GET  /chat/rooms/{matchingId}/unread-count # 읽지 않은 메시지 수
 ```
 
 #### 결제
@@ -151,13 +147,11 @@ POST /refunds               # 환불 요청
 GET  /refund-histories      # 환불 내역 조회
 ```
 
----
-
 ## 기술 스택
 
 ### **백엔드 핵심**
 - **Spring Boot 3.5.4**: 최신 안정 버전
-- **Java 24**: 최신 버전
+- **Java 24**: 최신 버전 (Preview)
 - **Spring Security 6**: JWT 기반 인증
 - **Spring Data JPA**: ORM 및 데이터 접근
 - **Spring WebFlux**: 반응형 프로그래밍 지원
@@ -183,8 +177,6 @@ GET  /refund-histories      # 환불 내역 조회
 - **Spring Boot Actuator**: 헬스체크 및 메트릭
 - **Logback**: 구조화된 로깅
 - **Micrometer**: 메트릭 수집
-
----
 
 ## 프로젝트 구조
 
@@ -237,8 +229,6 @@ src/main/java/com/yongjincompany/devblind/
 - **의존성 주입**: Spring IoC 컨테이너 활용
 - **Repository 패턴**: 데이터 접근 계층 추상화
 
----
-
 ## 보안
 
 ### **인증 및 인가**
@@ -257,8 +247,6 @@ src/main/java/com/yongjincompany/devblind/
 - **접근 로그**: 모든 API 접근 기록
 - **실패 로그**: 인증 실패 시도 기록
 - **이상 탐지**: 비정상적인 접근 패턴 감지
-
----
 
 ## 모니터링
 
@@ -292,8 +280,6 @@ curl -H "Authorization: Bearer YOUR_TOKEN" \
 - **데이터베이스 연결**: Connection Pool 상태
 - **Redis 연결**: 캐시 히트율
 - **외부 API**: SMS, 결제, S3 연동 상태
-
----
 
 ## 배포
 
@@ -345,8 +331,6 @@ export JAVA_OPTS="-Xmx2g -Xms1g"
 java $JAVA_OPTS -jar devblind-backend.jar
 ```
 
----
-
 ## 테스트
 
 ### **테스트 실행**
@@ -374,13 +358,9 @@ src/test/java/com/yongjincompany/devblind/
 - **서비스 계층**: 90% 이상
 - **컨트롤러 계층**: 85% 이상
 
----
-
 ## 개발자
 
 **Backend Developer**: 이용진
-
----
 
 ## 프로젝트 소개
 

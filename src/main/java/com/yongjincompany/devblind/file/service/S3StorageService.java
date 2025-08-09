@@ -13,6 +13,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectResponse;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.UUID;
 
 @Slf4j
@@ -92,13 +93,7 @@ public class S3StorageService {
         }
 
         // 지원하는 형식인지 확인
-        boolean isAllowedType = false;
-        for (String allowedType : allowedContentTypes) {
-            if (allowedType.equals(contentType)) {
-                isAllowedType = true;
-                break;
-            }
-        }
+        boolean isAllowedType = Arrays.asList(allowedContentTypes).contains(contentType);
 
         if (!isAllowedType) {
             log.warn("지원하지 않는 파일 형식: contentType={}", contentType);
@@ -117,13 +112,7 @@ public class S3StorageService {
             String extension = getFileExtension(originalFilename);
             String[] allowedExtensions = {"jpg", "jpeg", "png", "gif", "webp"};
             
-            boolean isAllowedExtension = false;
-            for (String allowedExt : allowedExtensions) {
-                if (allowedExt.equals(extension)) {
-                    isAllowedExtension = true;
-                    break;
-                }
-            }
+            boolean isAllowedExtension = Arrays.asList(allowedExtensions).contains(extension);
             
             if (!isAllowedExtension) {
                 log.warn("지원하지 않는 파일 확장자: extension={}", extension);

@@ -54,6 +54,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             response.setContentType("application/json");
             response.getWriter().write("{\"error\":\"" + ex.getMessage() + "\"}");
             return;
+        } catch (Exception ex) {
+            // JWT 검증 중 발생한 모든 예외 처리
+            SecurityContextHolder.clearContext();
+            response.setStatus(401);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"인증에 실패했습니다.\"}");
+            return;
         }
 
         filterChain.doFilter(request, response);
