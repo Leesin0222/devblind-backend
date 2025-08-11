@@ -34,10 +34,10 @@ public class JwtProvider {
         Date expiryDate = new Date(now.getTime() + expiration);
         
         return Jwts.builder()
-                .setSubject(String.valueOf(userId))
-                .setIssuedAt(now)
-                .setExpiration(expiryDate)
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .subject(String.valueOf(userId))
+                .issuedAt(now)
+                .expiration(expiryDate)
+                .signWith(getSigningKey())
                 .compact();
     }
     

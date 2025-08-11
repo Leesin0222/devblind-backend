@@ -1,4 +1,4 @@
-package com.yongjincompany.devblind.controller;
+package com.yongjincompany.devblind.payment.controller;
 
 import com.yongjincompany.devblind.payment.dto.TossRefundWebhookRequest;
 import com.yongjincompany.devblind.payment.service.RefundService;

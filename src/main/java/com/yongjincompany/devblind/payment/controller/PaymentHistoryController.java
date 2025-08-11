@@ -1,4 +1,4 @@
-package com.yongjincompany.devblind.controller;
+package com.yongjincompany.devblind.payment.controller;
 
 import com.yongjincompany.devblind.common.security.AuthUser;
 import com.yongjincompany.devblind.payment.dto.PaymentHistoryResponse;

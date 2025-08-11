@@ -52,35 +52,15 @@ public enum ErrorCode {
     private final String message;
     
     public int getStatus() {
-        switch (this) {
-            case UNAUTHORIZED:
-                return 401;
-            case FORBIDDEN:
-                return 403;
-            case VALIDATION_ERROR:
-            case INVALID_TOKEN:
-            case INVALID_REFRESH_TOKEN:
-            case INVALID_CODE:
-            case USER_NOT_FOUND:
-            case FILE_UPLOAD_FAILED:
-            case INVALID_FILE_TYPE:
-            case FILE_SIZE_EXCEEDED:
-            case INSUFFICIENT_COINS:
-            case INSUFFICIENT_BALANCE:
-            case ADDITIONAL_RECOMMENDATION_LIMIT_EXCEEDED:
-            case PAYMENT_NOT_FOUND:
-            case PRODUCT_NOT_FOUND:
-            case INVALID_REFUND_REQUEST:
-            case CHAT_ROOM_NOT_FOUND:
-            case CHAT_MESSAGE_NOT_FOUND:
-            case MATCHING_NOT_FOUND:
-            case MATCHING_PROFILE_NOT_FOUND:
-            case DAILY_RECOMMENDATION_LIMIT_EXCEEDED:
-            case SMS_SEND_FAILED:
-                return 400;
-            case SERVER_ERROR:
-            default:
-                return 500;
-        }
+        return switch (this) {
+            case UNAUTHORIZED -> 401;
+            case FORBIDDEN -> 403;
+            case VALIDATION_ERROR, INVALID_TOKEN, INVALID_REFRESH_TOKEN, INVALID_CODE, USER_NOT_FOUND,
+                 FILE_UPLOAD_FAILED, INVALID_FILE_TYPE, FILE_SIZE_EXCEEDED, INSUFFICIENT_COINS, INSUFFICIENT_BALANCE,
+                 ADDITIONAL_RECOMMENDATION_LIMIT_EXCEEDED, PAYMENT_NOT_FOUND, PRODUCT_NOT_FOUND, INVALID_REFUND_REQUEST,
+                 CHAT_ROOM_NOT_FOUND, CHAT_MESSAGE_NOT_FOUND, MATCHING_NOT_FOUND, MATCHING_PROFILE_NOT_FOUND,
+                 DAILY_RECOMMENDATION_LIMIT_EXCEEDED, SMS_SEND_FAILED -> 400;
+            default -> 500;
+        };
     }
 }
