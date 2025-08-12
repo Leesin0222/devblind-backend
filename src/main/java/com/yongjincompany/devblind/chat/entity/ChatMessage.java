@@ -50,6 +50,10 @@ public class ChatMessage {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private Boolean isRead = false; // 읽음 여부
+
     public enum MessageType {
         TEXT, IMAGE, FILE, CODE
     }
