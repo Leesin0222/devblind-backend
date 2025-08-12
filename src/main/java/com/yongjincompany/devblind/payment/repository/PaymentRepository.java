@@ -1,6 +1,6 @@
-package com.yongjincompany.devblind.repository;
+package com.yongjincompany.devblind.payment.repository;
 
-import com.yongjincompany.devblind.entity.Payment;
+import com.yongjincompany.devblind.payment.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

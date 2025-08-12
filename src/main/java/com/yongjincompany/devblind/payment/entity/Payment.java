@@ -1,4 +1,4 @@
-package com.yongjincompany.devblind.entity;
+package com.yongjincompany.devblind.payment.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
