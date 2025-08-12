@@ -1,7 +1,7 @@
-package com.yongjincompany.devblind.dto.user;
+package com.yongjincompany.devblind.user.dto;
 
-import lombok.Builder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 @Builder
 @Schema(description = "프로필 이미지 업로드 응답")

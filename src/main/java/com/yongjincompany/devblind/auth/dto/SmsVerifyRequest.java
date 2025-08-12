@@ -2,9 +2,6 @@ package com.yongjincompany.devblind.auth.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 public record SmsVerifyRequest(
     @NotBlank(message = "전화번호는 필수입니다")

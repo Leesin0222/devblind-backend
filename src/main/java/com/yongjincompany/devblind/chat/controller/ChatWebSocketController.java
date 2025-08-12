@@ -1,4 +1,4 @@
-package com.yongjincompany.devblind.controller;
+package com.yongjincompany.devblind.chat.controller;
 
 import com.yongjincompany.devblind.chat.dto.ChatMessageWebSocketRequest;
 import com.yongjincompany.devblind.chat.dto.ChatMessageResponse;

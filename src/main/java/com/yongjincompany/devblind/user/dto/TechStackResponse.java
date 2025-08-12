@@ -1,10 +1,5 @@
 package com.yongjincompany.devblind.user.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
 public record TechStackResponse(
     Long id,
     String name
