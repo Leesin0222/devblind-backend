@@ -15,11 +15,11 @@ public class OpenApiConfig {
     public OpenAPI openAPI() {
         Info info = new Info()
                 .title("DevBlind API")
-                .description("개발자 데이팅 앱 DevBlind의 REST API 문서")
+                .description("개발자 데이팅(멘토링) 앱 DevBlind의 REST API 문서")
                 .version("1.0.0")
                 .contact(new Contact()
                         .name("DevBlind Team")
-                        .email("devblind@example.com"));
+                        .email("dragon02tv@gmail.com"));
 
         SecurityScheme securityScheme = new SecurityScheme()
                 .type(SecurityScheme.Type.HTTP)
