@@ -1,4 +1,4 @@
-package com.yongjincompany.devblind.auth.service;
+package com.yongjincompany.devblind.service;
 
 import com.yongjincompany.devblind.common.security.JwtProvider;
 import com.yongjincompany.devblind.auth.dto.TokenRefreshRequest;

@@ -1,4 +1,4 @@
-package com.yongjincompany.devblind.payment.service;
+package com.yongjincompany.devblind.service;
 
 import com.yongjincompany.devblind.common.util.TossPaymentClient;
 import com.yongjincompany.devblind.payment.dto.PaymentRequest;

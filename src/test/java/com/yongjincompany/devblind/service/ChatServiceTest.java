@@ -1,4 +1,4 @@
-package com.yongjincompany.devblind.chat.service;
+package com.yongjincompany.devblind.service;
 
 import com.yongjincompany.devblind.chat.dto.ChatMessageRequest;
 import com.yongjincompany.devblind.chat.dto.ChatMessageResponse;

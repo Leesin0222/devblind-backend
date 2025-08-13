@@ -1,4 +1,4 @@
-package com.yongjincompany.devblind.matching.service;
+package com.yongjincompany.devblind.service;
 
 import com.yongjincompany.devblind.matching.dto.LikeRequest;
 import com.yongjincompany.devblind.matching.dto.LikeResponse;
