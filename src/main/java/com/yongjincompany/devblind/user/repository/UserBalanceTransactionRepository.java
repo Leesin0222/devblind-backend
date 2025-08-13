@@ -12,10 +12,5 @@ import java.util.List;
 @Repository
 public interface UserBalanceTransactionRepository extends JpaRepository<UserBalanceTransaction, Long> {
     
-    List<UserBalanceTransaction> findByUserOrderByCreatedAtDesc(User user);
-    
-    @Query("SELECT ubt FROM UserBalanceTransaction ubt WHERE ubt.user = :user ORDER BY ubt.createdAt DESC")
-    List<UserBalanceTransaction> findAllByUserOrderByCreatedAtDesc(@Param("user") User user);
-    
     List<UserBalanceTransaction> findByUserIdOrderByCreatedAtDesc(Long userId);
 }

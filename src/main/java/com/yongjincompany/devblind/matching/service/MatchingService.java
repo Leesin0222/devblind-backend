@@ -12,7 +12,6 @@ import com.yongjincompany.devblind.matching.entity.DailyRecommendation;
 import com.yongjincompany.devblind.matching.entity.Matching;
 import com.yongjincompany.devblind.matching.entity.MatchingProfile;
 import com.yongjincompany.devblind.matching.entity.UserLike;
-import com.yongjincompany.devblind.user.entity.DeviceToken;
 import com.yongjincompany.devblind.user.entity.TechStack;
 import com.yongjincompany.devblind.user.entity.User;
 import com.yongjincompany.devblind.user.entity.UserTechStack;

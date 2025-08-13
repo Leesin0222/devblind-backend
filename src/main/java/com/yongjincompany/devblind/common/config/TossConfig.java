@@ -11,7 +11,7 @@ import java.util.Base64;
 @Configuration
 public class TossConfig {
 
-    @Value("${toss.secret-key}")
+    @Value("${toss.payment.secret-key}")
     private String secretKey;
 
     @Bean

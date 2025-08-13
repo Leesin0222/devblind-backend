@@ -9,7 +9,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -21,6 +21,7 @@ spring:
       host: localhost
       port: 6379
 
+# 로컬 환경에서만 필요한 설정들
 sms:
   enabled: false  # 로컬 환경에서는 SMS 발송 비활성화
   provider: fake
@@ -32,3 +33,19 @@ sms:
 
 firebase:
   enabled: false  # 로컬 환경에서는 Firebase 비활성화
+
+# 로컬 환경에서 환경변수가 없을 때 사용할 기본값
+jwt:
+  secret: local_dev_secret_key_for_development_only
+
+toss:
+  payment:
+    secret-key: local_test_key
+  refund:
+    secret-key: local_test_key
+
+aws:
+  s3:
+    bucket: devblind-local-bucket
+    access-key: local_access_key
+    secret-key: local_secret_key
