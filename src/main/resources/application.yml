@@ -56,14 +56,9 @@ management:
 
 # Swagger/OpenAPI 설정
 springdoc:
-  api-docs:
-    path: /api-docs
   swagger-ui:
+    enabled: true
     path: /swagger-ui.html
-    tags-sorter: alpha
-    operations-sorter: alpha
-    display-request-duration: true
-    filter: true
-  packages-to-scan: com.yongjincompany.devblind
-  default-produces-media-type: application/json
-  default-consumes-media-type: application/json
+  api-docs:
+    enabled: true
+    path: /v3/api-docs

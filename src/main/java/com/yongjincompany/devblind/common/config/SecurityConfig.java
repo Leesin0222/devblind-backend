@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .csrf(CsrfConfigurer::disable)
                 .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**", "/swagger-ui/**", "/api-docs/**", "/actuator/health").permitAll()
+                        .requestMatchers("/auth/**", "/swagger-ui/**", "/swagger-ui.html", "/api-docs/**", "/v3/api-docs/**", "/actuator/health").permitAll()
                         .requestMatchers("/api/files/**", "/payments/**", "/refunds/**", "/users/**", "/matching/**", "/chat/**").authenticated()
                         .anyRequest().denyAll()
                 )

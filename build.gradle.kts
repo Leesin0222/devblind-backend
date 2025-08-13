@@ -12,7 +12,7 @@ val firebaseVersion = "9.2.0"
 val awsSdkVersion = "2.24.12"
 val jwtVersion = "0.12.5"
 val mockitoVersion = "5.8.0"
-val springdocVersion = "2.3.0"
+val springdocVersion = "2.7.0"
 
 java {
 	toolchain {
