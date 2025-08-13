@@ -37,8 +37,8 @@ public class SignupService {
             throw new ApiException(ErrorCode.VALIDATION_ERROR);
         }
 
-        List<TechStack> stacks = request.techStackIds() != null && !request.techStackIds().isEmpty() 
-                ? techStackRepository.findByIdIn(request.techStackIds()) 
+        List<TechStack> stacks = request.techStackIds() != null && !request.techStackIds().isEmpty()
+                ? techStackRepository.findByIdIn(request.techStackIds())
                 : List.of();
 
         User user = User.builder()
@@ -47,6 +47,9 @@ public class SignupService {
                 .birth(LocalDate.parse(request.birth()))
                 .gender(User.Gender.valueOf(request.gender().toUpperCase()))
                 .profileImageUrl(request.profileImageUrl())
+                .age(request.age())
+                .bio(request.bio())
+                .location(request.location())
                 .createdAt(LocalDateTime.now())
                 .build();
 
