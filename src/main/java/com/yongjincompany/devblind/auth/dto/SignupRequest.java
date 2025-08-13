@@ -23,8 +23,10 @@ public record SignupRequest(
     
     @NotBlank(message = "지역은 필수입니다")
     String location,
-    
+
+    @NotBlank(message = "자기소개는 필수입니다")
     String bio,
+
     List<String> techStacks,
     String signupToken,
     List<Long> techStackIds,
