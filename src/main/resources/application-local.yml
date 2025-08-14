@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/devblind_local_db
+    url: jdbc:postgresql://postgres:5432/devblind_local_db
     driver-class-name: org.postgresql.Driver
     username: root
     password: root
@@ -18,7 +18,7 @@ spring:
 
   data:
     redis:
-      host: localhost
+      host: redis
       port: 6379
 
 # 로컬 환경에서만 필요한 설정들
@@ -49,3 +49,9 @@ aws:
     bucket: devblind-local-bucket
     access-key: local_access_key
     secret-key: local_secret_key
+
+# 로컬 환경에서 Spring Boot는 HTTP로 실행 (Nginx가 HTTPS 처리)
+server:
+  port: 8080
+  ssl:
+    enabled: false

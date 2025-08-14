@@ -53,12 +53,9 @@ management:
   endpoint:
     health:
       show-details: when-authorized
-
 # Swagger/OpenAPI 설정
 springdoc:
   swagger-ui:
     enabled: true
-    path: /swagger-ui.html
   api-docs:
     enabled: true
-    path: /v3/api-docs
