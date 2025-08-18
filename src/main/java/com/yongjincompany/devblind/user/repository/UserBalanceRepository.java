@@ -1,6 +1,5 @@
 package com.yongjincompany.devblind.user.repository;
 
-import com.yongjincompany.devblind.user.entity.User;
 import com.yongjincompany.devblind.user.entity.UserBalance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

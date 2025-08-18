@@ -27,9 +27,15 @@ public record SignupRequest(
     @NotBlank(message = "자기소개는 필수입니다")
     String bio,
 
-    List<String> techStacks,
-    String signupToken,
+    @NotNull(message = "기술스택은 필수입니다")
     List<Long> techStackIds,
+    
+    @NotBlank(message = "SMS 인증 토큰은 필수입니다")
+    String signupToken,
+    
+    @NotBlank(message = "생년월일은 필수입니다")
     String birth,
+    
+    @NotBlank(message = "프로필 이미지는 필수입니다")
     String profileImageUrl
 ) {}
