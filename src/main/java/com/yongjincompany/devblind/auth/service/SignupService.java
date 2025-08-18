@@ -9,6 +9,8 @@ import com.yongjincompany.devblind.common.exception.ApiException;
 import com.yongjincompany.devblind.common.exception.ErrorCode;
 import com.yongjincompany.devblind.user.repository.TechStackRepository;
 import com.yongjincompany.devblind.user.repository.UserRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class SignupService {
     private final JwtProvider jwtProvider;
     private final RefreshTokenService refreshTokenService;
 
+    @Transactional
     public AuthResponse signup(SignupRequest request) {
         String phoneNumber = redisTemplate.opsForValue().get("signupToken:" + request.signupToken());
         if (phoneNumber == null) {

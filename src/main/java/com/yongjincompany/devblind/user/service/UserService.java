@@ -9,6 +9,9 @@ import com.yongjincompany.devblind.common.exception.ApiException;
 import com.yongjincompany.devblind.common.exception.ErrorCode;
 import com.yongjincompany.devblind.user.repository.UserRepository;
 import com.yongjincompany.devblind.user.repository.UserTechStackRepository;
+
+import jakarta.transaction.Transactional;
+
 import com.yongjincompany.devblind.user.repository.TechStackRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,7 @@ public class UserService {
     private final UserTechStackRepository userTechStackRepository;
     private final TechStackRepository techStackRepository;
 
+    @Transactional
     public void updateUser(String phoneNumber, UpdateUserRequest request) {
         log.info("사용자 프로필 업데이트 요청: phoneNumber={}", phoneNumber);
         
@@ -48,6 +52,7 @@ public class UserService {
         log.info("사용자 프로필 업데이트 완료: userId={}", user.getId());
     }
 
+    @Transactional
     public void deleteUser(String phoneNumber) {
         log.info("사용자 삭제 요청: phoneNumber={}", phoneNumber);
         

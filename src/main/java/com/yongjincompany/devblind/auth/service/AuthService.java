@@ -9,6 +9,8 @@ import com.yongjincompany.devblind.user.entity.User;
 import com.yongjincompany.devblind.common.exception.ApiException;
 import com.yongjincompany.devblind.common.exception.ErrorCode;
 import com.yongjincompany.devblind.user.repository.UserRepository;
+
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -53,6 +55,7 @@ public class AuthService {
         return new TokenRefreshResponse(newAccessToken, newRefreshToken);
     }
 
+    @Transactional
     public VerifyCodeResponse verifyCodeAndLoginOrSignup(String phone, String code) {
         String key = "sms:" + phone;
         String storedCode = redisTemplate.opsForValue().get(key);

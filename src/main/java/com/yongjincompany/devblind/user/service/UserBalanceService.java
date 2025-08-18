@@ -1,13 +1,11 @@
 package com.yongjincompany.devblind.user.service;
 
-import com.yongjincompany.devblind.user.entity.User;
 import com.yongjincompany.devblind.user.entity.UserBalance;
 import com.yongjincompany.devblind.user.entity.UserBalanceTransaction;
 import com.yongjincompany.devblind.common.exception.ApiException;
 import com.yongjincompany.devblind.common.exception.ErrorCode;
 import com.yongjincompany.devblind.user.repository.UserBalanceRepository;
 import com.yongjincompany.devblind.user.repository.UserBalanceTransactionRepository;
-import com.yongjincompany.devblind.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserBalanceService {
 
-    private final UserRepository userRepository;
     private final UserBalanceRepository balanceRepository;
     private final UserBalanceTransactionRepository transactionRepository;
 
